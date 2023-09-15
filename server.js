@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
 
 mongoose
-  .connect(DB_HOST, { useNewUrlParser: true })
+  .connect(DB_HOST, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     app.listen(PORT);
     console.log("Database connection successful");
