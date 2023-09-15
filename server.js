@@ -1,11 +1,11 @@
 const app = require("./app");
-const { DB_HOST, PORT } = process.env;
+const { DB_HOST, PORT = 3000 } = process.env;
 const mongoose = require("mongoose");
 
 mongoose.set("strictQuery", true);
 
 mongoose
-  .connect(DB_HOST)
+  .connect(DB_HOST, { useNewUrlParser: true })
   .then(() => {
     app.listen(PORT);
     console.log("Database connection successful");
