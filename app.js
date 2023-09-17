@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 app.use("/api/users", authRouter);
-app.use("/exercises", exercisesRouter);
+app.use("/api/exercises", exercisesRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

@@ -9,6 +9,8 @@ const { validateBody, isValidId, authenticate } = require('../../middlewares')
 
 router.get('/', ctrl.getAllExercises)
 
+router.get('/:category/subcategories', ctrl.getSubcategoriesByCategory);
+
 router.get('/:id', authenticate, isValidId, ctrl.getExercisesById)
 
 router.post('/', authenticate, validateBody(schemas.addSchema), ctrl.addExercise)

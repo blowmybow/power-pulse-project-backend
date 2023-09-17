@@ -58,7 +58,8 @@ const exerciseSchema = new Schema(
     time: Joi.number(),
     favorite: Joi.boolean().optional(),
   });
-  
+
+ 
   const updateFavoriteSchema = Joi.object({
     favorite: Joi.boolean()
       .required()
@@ -71,6 +72,7 @@ const exerciseSchema = new Schema(
   }
 
   const Exercise = model('exercise', exerciseSchema);
+  
   
   module.exports = {
     Exercise,

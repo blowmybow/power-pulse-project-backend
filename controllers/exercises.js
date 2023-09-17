@@ -20,6 +20,36 @@ const getAllExercises = async (req, res) => {
   res.json(result);
 };
 
+const getSubcategoriesByCategory = async (req, res) => {
+  const { category } = req.params;
+  const { page = 1, limit = 20 } = req.query;
+
+  let exercises = [];
+
+  switch (category) {
+    case 'bodyParts':
+      exercises = await Exercise.find({ bodyPart: { $exists: true, $ne: null } })
+        .skip((page - 1) * limit)
+        .limit(limit);
+      break;
+    case 'muscles':
+      exercises = await Exercise.find({ target: { $exists: true, $ne: null } })
+        .skip((page - 1) * limit)
+        .limit(limit);
+      break;
+    case 'equipment':
+      exercises = await Exercise.find({ equipment: { $exists: true, $ne: null } })
+        .skip((page - 1) * limit)
+        .limit(limit);
+      break;
+    default:
+      exercises = [];
+      break;
+  }
+
+  res.status(200).json(exercises);
+};
+
 const getExercisesById = async (req, res) => {
   const { id } = req.params;
   const result = await Exercise.findById(id);
@@ -77,6 +107,7 @@ const updateStatusExercise = async (req, res) => {
 
 module.exports = {
     getAllExercises: ctrlWrapper(getAllExercises),
+    getSubcategoriesByCategory: ctrlWrapper(getSubcategoriesByCategory),
     getExercisesById: ctrlWrapper(getExercisesById),
     removeExercise: ctrlWrapper(removeExercise),
     addExercise: ctrlWrapper(addExercise),
