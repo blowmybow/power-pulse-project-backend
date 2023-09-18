@@ -33,11 +33,6 @@ const exerciseSchema = new Schema(
         type: Number,
       },
 
-      favorite: {
-        type: Boolean,
-        default: false,
-      },
-  
       // owner: {
       //   type: Schema.Types.ObjectId,
       //   ref: 'user',
@@ -50,25 +45,14 @@ const exerciseSchema = new Schema(
   exerciseSchema.post('save', handleMongooseError);
   
   const addSchema = Joi.object({
-    bodyPart: Joi.string(),
-    equipment: Joi.string(),
-    name: Joi.string(),
-    target: Joi.string(),
-    burnedCalories: Joi.number(),
-    time: Joi.number(),
-    favorite: Joi.boolean().optional(),
-  });
-
- 
-  const updateFavoriteSchema = Joi.object({
-    favorite: Joi.boolean()
-      .required()
-      .messages({ 'any.required': `Missing field favorite` }),
+    time: Joi.number().min(1).required(),
+    exerciseId: Joi.string().required(),
+    date: Joi.string().pattern(/^\d{2}\/\d{2}\/\d{4}$/).required(),
+    calories: Joi.number().min(1).required(),
   });
   
   const schemas = {
     addSchema,
-    updateFavoriteSchema,
   }
 
   const Exercise = model('exercise', exerciseSchema);
