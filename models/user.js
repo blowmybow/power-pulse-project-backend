@@ -46,7 +46,7 @@ const userDataSchema = new Schema(
           const ableAge = new Date().getFullYear() - birthday.getFullYear();
           return ableAge >= 18;
         },
-        message: 'Age must be 18 or older.',
+        message: "Age must be 18 or older.",
       },
     },
     // owner: {
@@ -78,6 +78,18 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
     userData: userDataSchema,
   },
   { versionKey: false, timestamps: true }
@@ -91,9 +103,20 @@ const registerSchema = Joi.object({
   password: Joi.string().pattern(passwordRegex).required(),
 });
 
+const userEmailSchema = Joi.object({
+  email: Joi.string()
+    .pattern(emailRegexp)
+    .required()
+    .messages({ "any.required": "Missing required field email" }),
+});
+
 const loginSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().pattern(passwordRegex).required(),
+  email: Joi.string().pattern(emailRegexp).required().messages({
+    "any.required": "Missing field 'email'",
+  }),
+  password: Joi.string().pattern(passwordRegex).required().messages({
+    "any.required": "Missing field 'password'",
+  }),
 });
 
 const addUserDataSchema = Joi.object({
@@ -122,22 +145,23 @@ const updUserDataSchema = Joi.object({
     currentWeight: Joi.number().min(35),
     desiredWeight: Joi.number().min(35),
     birthday: Joi.date()
-    .max("now")
-    .custom((value, helpers) => {
-      const age = new Date().getFullYear() - value.getFullYear();
-      if (age < 18) {
-        return helpers.error("date.min", { limit: "18 years" });
-      }
-      return value;
-    }, "Must be older than 18 years"),
+      .max("now")
+      .custom((value, helpers) => {
+        const age = new Date().getFullYear() - value.getFullYear();
+        if (age < 18) {
+          return helpers.error("date.min", { limit: "18 years" });
+        }
+        return value;
+      }, "Must be older than 18 years"),
     blood: Joi.number().valid(1, 2, 3, 4),
     sex: Joi.string().valid("male", "female"),
     levelActivity: Joi.number().valid(1, 2, 3, 4, 5),
-  })
+  }),
 });
 
 const schemas = {
   registerSchema,
+  userEmailSchema,
   loginSchema,
   addUserDataSchema,
   updUserDataSchema,
@@ -149,4 +173,3 @@ module.exports = {
   User,
   schemas,
 };
-
