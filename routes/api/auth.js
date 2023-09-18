@@ -7,33 +7,33 @@ const ctrl = require("../../controllers/usersAuth");
 const router = express.Router();
 
 router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
-router.get("/verify/:verificationToken", ctrl.verifyEmail);
-router.post(
-  "/verify",
-  validateBody(schemas.userEmailSchema),
-  ctrl.resendVerifyEmail
-);
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
-router.get("/current", authenticate, ctrl.getCurrent);
+// router.get("/current", authenticate, ctrl.getCurrent);
 router.post(
-  "/info",
+  "/params",
   authenticate,
-  validateBody(schemas.addUserDataSchema),
-  ctrl.addUserData
+  validateBody(schemas.updateUserParamsSchema),
+  ctrl.updateParams
 );
 router.put(
-  "/info",
+  "/params",
   authenticate,
-  validateBody(schemas.updUserDataSchema),
-  ctrl.updateUserData
+  validateBody(schemas.updateUserParamsSchema),
+  ctrl.updateParams
 );
-router.get("/info", authenticate, ctrl.getUserData);
-router.post("/logout", authenticate, ctrl.logout);
+router.get("/params", authenticate, ctrl.getParams);
+router.patch(
+  "/username",
+  authenticate,
+  validateBody(schemas.updateUsername),
+  ctrl.updateUsername
+);
 router.patch(
   "/avatars",
   authenticate,
   upload.single("avatar"),
   ctrl.updateAvatar
 );
+router.post("/logout", authenticate, ctrl.logout);
 
 module.exports = router;

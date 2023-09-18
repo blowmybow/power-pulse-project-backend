@@ -4,18 +4,12 @@ const gravatar = require("gravatar");
 const path = require("path");
 const fs = require("fs/promises");
 const Jimp = require("jimp");
-const { randomUUID } = require("crypto");
 
 const { User } = require("../models/user");
-const {
-  ctrlWrapper,
-  HttpError,
-  dailyCaloriesCalc,
-  sendEmail,
-} = require("../helpers");
+const { ctrlWrapper, HttpError, dailyCaloriesCalc } = require("../helpers");
 
 const avatarDir = path.resolve("public", "avatars");
-const { SECRET_KEY, BASE_URL } = process.env;
+const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -28,21 +22,12 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
-  const verificationToken = randomUUID();
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL,
-    verificationToken,
   });
-  const verifyEmail = {
-    to: email,
-    subject: "Сonfirm your registration",
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${verificationToken}">Click to confirm your registration</a>`,
-  };
-
-  await sendEmail(verifyEmail);
 
   const payload = {
     id: newUser._id,
@@ -57,50 +42,6 @@ const register = async (req, res) => {
       name: newUser.name,
       email: newUser.email,
     },
-  });
-};
-
-const verifyEmail = async (req, res) => {
-  const { verificationToken } = req.params;
-
-  const user = await User.findOne({ verificationToken });
-
-  if (!user) {
-    throw HttpError(404, "User not found");
-  }
-
-  await User.findByIdAndUpdate(user._id, {
-    verify: true,
-    verificationToken: "",
-  });
-
-  res.json({
-    message: "Verification successful",
-  });
-};
-
-const resendVerifyEmail = async (req, res) => {
-  const { email } = req.body;
-
-  const user = await User.findOne({ email });
-
-  if (!user) {
-    throw HttpError(404, "missing required field email");
-  }
-  if (user.verify) {
-    throw HttpError(400, "Verification has already been passed");
-  }
-
-  const verifyEmail = {
-    to: email,
-    subject: "Сonfirm your registration",
-    html: `<a target="_blank" href="${BASE_URL}/api/auth/verify/${user.verificationToken}">Click to confirm your registration</a>`,
-  };
-
-  await sendEmail(verifyEmail);
-
-  res.json({
-    message: "Verification email sent",
   });
 };
 
@@ -130,110 +71,91 @@ const login = async (req, res) => {
   await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
-    token: token,
+    token,
     user: {
       name: user.name,
       email: user.email,
+      userParams: user.userParams,
     },
   });
 };
 
-const addUserData = async (req, res) => {
+const updateParams = async (req, res) => {
   const { email } = req.user;
-  const { sex, birthday, height, desiredWeight, activityLevel } = req.body;
 
-  const bmrData = dailyCaloriesCalc(
-    sex,
-    birthday,
-    height,
-    desiredWeight,
-    activityLevel
-  );
-
-  const userData = {
+  const userParams = {
     ...req.body,
   };
+
   const user = await User.findOneAndUpdate(
     { email },
-    { userData: userData },
+    { userParams: userParams },
     { new: true }
   );
 
-  res.status(201).json({
-    user: {
-      userData: user.userData,
-    },
-    bmrData,
-  });
-};
+  const { desiredWeight, height, birthday, sex, levelActivity } =
+    user.userParams;
 
-const updateUserData = async (req, res) => {
-  const { email } = req.user;
-  const user = await User.findOneAndUpdate(
-    { email },
-    { ...req.body },
-    { new: true }
-  );
-
-  const { sex, birthday, height, desiredWeight, activityLevel } = user.userData;
-
-  const bmrData = dailyCaloriesCalc(
-    sex,
-    birthday,
-    height,
+  const bmr = dailyCaloriesCalc(
     desiredWeight,
-    activityLevel
+    height,
+    birthday,
+    sex,
+    levelActivity
   );
 
   res.status(200).json({
     user: {
       name: user.name,
-      userData: user.userData,
+      userParams: user.userParams,
     },
-    bmrData,
+    bmr,
   });
 };
 
-const getUserData = async (req, res) => {
+const getParams = async (req, res) => {
   const { email } = req.user;
   const user = await User.findOne({ email });
 
-  if (user.userData) {
-    const { sex, birthday, height, desiredWeight, activityLevel } =
-      user.userData;
+  const { desiredWeight, height, birthday, sex, levelActivity } =
+    user.userParams;
 
-    const bmrData = dailyCaloriesCalc(
-      sex,
-      birthday,
-      height,
-      desiredWeight,
-      activityLevel
-    );
+  const bmr = dailyCaloriesCalc(
+    desiredWeight,
+    height,
+    birthday,
+    sex,
+    levelActivity
+  );
 
-    res.status(200).json({
-      user: {
-        name: user.name,
-        userData: user.userData,
-      },
-      bmrData,
-    });
-  } else {
-    res.status(200).json({
-      user: {
-        name: user.name,
-      },
-    });
-  }
-};
-
-const getCurrent = async (req, res) => {
-  const { token, name, email, avatar } = req.user;
-
-  res.json({
-    token,
-    user: { name, email, avatar },
+  res.status(200).json({
+    user: {
+      name: user.name,
+      avatarUrl: user.avatarUrl,
+      userParams: user.userParams,
+    },
+    bmr,
   });
 };
+
+const updateUsername = async (req, res) => {
+  const { email } = req.user;
+  const user = await User.findOneAndUpdate({ email }, req.body, { new: true });
+
+  res.status(200).json({
+    user: {
+      name: user.name,
+    },
+  });
+};
+// const getCurrent = async (req, res) => {
+//   const { token, name, email, avatarURL } = req.user;
+
+//   res.json({
+//     token,
+//     user: { name, email, avatarURL },
+//   });
+// };
 
 const logout = async (req, res) => {
   const { _id } = req.user;
@@ -277,13 +199,10 @@ const updateAvatar = async (req, res) => {
 
 module.exports = {
   register: ctrlWrapper(register),
-  verifyEmail: ctrlWrapper(verifyEmail),
-  resendVerifyEmail: ctrlWrapper(resendVerifyEmail),
   login: ctrlWrapper(login),
-  addUserData: ctrlWrapper(addUserData),
-  updateUserData: ctrlWrapper(updateUserData),
-  getUserData: ctrlWrapper(getUserData),
-  getCurrent: ctrlWrapper(getCurrent),
+  updateParams: ctrlWrapper(updateParams),
+  getParams: ctrlWrapper(getParams),
+  updateUsername: ctrlWrapper(updateUsername),
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
 };
