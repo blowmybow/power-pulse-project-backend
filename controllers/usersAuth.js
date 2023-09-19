@@ -148,14 +148,15 @@ const updateUsername = async (req, res) => {
     },
   });
 };
-// const getCurrent = async (req, res) => {
-//   const { token, name, email, avatarURL } = req.user;
+const getCurrent = async (req, res) => {
+  const { token, name, email, avatarURL } = req.user;
 
-//   res.json({
-//     token,
-//     user: { name, email, avatarURL },
-//   });
-// };
+  res.json({
+    token,
+    user: { name, email },
+    avatarURL,
+  });
+};
 
 const logout = async (req, res) => {
   const { _id } = req.user;
@@ -200,6 +201,7 @@ const updateAvatar = async (req, res) => {
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  getCurrent: ctrlWrapper(getCurrent),
   updateParams: ctrlWrapper(updateParams),
   getParams: ctrlWrapper(getParams),
   updateUsername: ctrlWrapper(updateUsername),
