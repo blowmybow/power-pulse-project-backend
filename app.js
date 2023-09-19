@@ -17,7 +17,7 @@ app.use(express.static("public"));
 
 app.use("/api/auth", authRouter);
 app.use("/api/exercises", exercisesRouter);
-app.use("/api/:category", filtersRouter);
+app.use("/api/exercises/:category", filtersRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

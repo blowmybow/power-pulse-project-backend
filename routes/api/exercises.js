@@ -5,9 +5,7 @@ const ctrl = require('../../controllers/exercises')
 const { validateBody, isValidId, authenticate } = require('../../middlewares')
 
 
-// router.get('/', authenticate, ctrl.getAllExercises)
-
-router.get('/', ctrl.getAllExercises)
+router.get('/', authenticate, ctrl.getAllExercises)
 
 router.get('/:id', authenticate, isValidId, ctrl.getExercisesById)
 

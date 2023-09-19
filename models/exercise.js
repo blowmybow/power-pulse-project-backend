@@ -32,22 +32,46 @@ const exerciseSchema = new Schema(
       time: {
         type: Number,
       },
+    },
+    { versionKey: false, timestamps: true }
+  );
 
-      // owner: {
-      //   type: Schema.Types.ObjectId,
-      //   ref: 'user',
-      //   required: true,
-      // },
+  const userExerciseSchema = new Schema(
+    {
+      owner: {
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true,
+      },
+      exercise: {
+        type: Object,
+        
+        required: true,
+      },
+      time: {
+        type: Number,
+        required: true,
+      },
+      date: {
+        type: String,
+        required: true,
+      },
+      calories: {
+        type: Number,
+        required: true,
+      },
     },
     { versionKey: false, timestamps: true }
   );
   
-  exerciseSchema.post('save', handleMongooseError);
+  const UserExercise = model('user_exercise', userExerciseSchema);
+  
+  userExerciseSchema.post('save', handleMongooseError);
   
   const addSchema = Joi.object({
     time: Joi.number().min(1).required(),
     exerciseId: Joi.string().required(),
-    date: Joi.string().pattern(/^\d{2}\/\d{2}\/\d{4}$/).required(),
+    date: Joi.string().required(),
     calories: Joi.number().min(1).required(),
   });
   
@@ -60,5 +84,6 @@ const exerciseSchema = new Schema(
   
   module.exports = {
     Exercise,
+    UserExercise,
     schemas,
   };
