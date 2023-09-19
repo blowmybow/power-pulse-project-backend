@@ -4,9 +4,9 @@ const Joi = require("joi");
 const { handleMongooseError } = require("../helpers");
 
 const emailRegexp = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
-const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,}$/;
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
-const userParamsSchema = new Schema(
+const userDataSchema = new Schema(
   {
     height: {
       type: Number,
@@ -77,7 +77,7 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
-    userParams: { type: userParamsSchema, default: {} },
+    userData: { type: userDataSchema, default: {} },
   },
   { versionKey: false, minimize: false, timestamps: true }
 );
@@ -99,7 +99,7 @@ const loginSchema = Joi.object({
   }),
 });
 
-const updateUserParamsSchema = Joi.object({
+const updUserDataSchema = Joi.object({
   height: Joi.number().min(150).required(),
   currentWeight: Joi.number().min(35).required(),
   desiredWeight: Joi.number().min(35).required(),
@@ -131,7 +131,7 @@ const updateUsername = Joi.object({
 const schemas = {
   registerSchema,
   loginSchema,
-  updateUserParamsSchema,
+  updUserDataSchema,
   updateUsername,
 };
 

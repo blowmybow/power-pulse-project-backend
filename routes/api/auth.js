@@ -10,18 +10,19 @@ router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
 router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
 router.get("/current", authenticate, ctrl.getCurrent);
 router.post(
-  "/params",
+  "/data",
   authenticate,
-  validateBody(schemas.updateUserParamsSchema),
-  ctrl.updateParams
+  validateBody(schemas.updUserDataSchema),
+  ctrl.updateData
 );
 router.put(
-  "/params",
+  "/data",
   authenticate,
-  validateBody(schemas.updateUserParamsSchema),
-  ctrl.updateParams
+  validateBody(schemas.updUserDataSchema),
+  ctrl.updateData
 );
-router.get("/params", authenticate, ctrl.getParams);
+
+router.get("/data", authenticate, ctrl.getData);
 router.patch(
   "/username",
   authenticate,

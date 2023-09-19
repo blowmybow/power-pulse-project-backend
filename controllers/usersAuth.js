@@ -75,26 +75,26 @@ const login = async (req, res) => {
     user: {
       name: user.name,
       email: user.email,
-      userParams: user.userParams,
+      userData: user.userData,
     },
   });
 };
 
-const updateParams = async (req, res) => {
+const updateData = async (req, res) => {
   const { email } = req.user;
 
-  const userParams = {
+  const userData = {
     ...req.body,
   };
 
   const user = await User.findOneAndUpdate(
     { email },
-    { userParams: userParams },
+    { userData: userData },
     { new: true }
   );
 
   const { desiredWeight, height, birthday, sex, levelActivity } =
-    user.userParams;
+    user.userData;
 
   const bmr = dailyCaloriesCalc(
     desiredWeight,
@@ -107,18 +107,18 @@ const updateParams = async (req, res) => {
   res.status(200).json({
     user: {
       name: user.name,
-      userParams: user.userParams,
+      userData: user.userData,
     },
     bmr,
   });
 };
 
-const getParams = async (req, res) => {
+const getData = async (req, res) => {
   const { email } = req.user;
   const user = await User.findOne({ email });
 
   const { desiredWeight, height, birthday, sex, levelActivity } =
-    user.userParams;
+    user.userData;
 
   const bmr = dailyCaloriesCalc(
     desiredWeight,
@@ -132,7 +132,7 @@ const getParams = async (req, res) => {
     user: {
       name: user.name,
       avatarUrl: user.avatarUrl,
-      userParams: user.userParams,
+      userData: user.userData,
     },
     bmr,
   });
@@ -202,8 +202,8 @@ module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
-  updateParams: ctrlWrapper(updateParams),
-  getParams: ctrlWrapper(getParams),
+  updateData: ctrlWrapper(updateData),
+  getData: ctrlWrapper(getData),
   updateUsername: ctrlWrapper(updateUsername),
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
