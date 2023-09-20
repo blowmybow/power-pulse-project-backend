@@ -1,4 +1,5 @@
 const { Exercise, UserExercise } = require('../models/exercise');
+const { Category } = require('../models/category');
 
 const HttpError = require('../helpers/HttpError');
 const ctrlWrapper = require('../helpers/ctrlWrapper');
@@ -11,9 +12,42 @@ const getAllExercises = async (req, res) => {
     limit,
   });
 
+  if (!result) {
+    throw HttpError(404, 'Not found');
+  }
+
   res.status(200).json(result);
 };
 
+const getSubcategoriesByCategory = async (req, res) => {
+    
+  const { category } = req.params;
+  const { page = 1, limit = 20 } = req.query;
+
+  let exercises = [];
+
+  switch (category) {
+    case 'bodyParts':
+  exercises = await Category.find({ filter: "Body parts" })
+    .skip((page - 1) * limit)
+    .limit(limit);
+  break;
+
+  case 'muscles':
+  exercises = await Category.find({ filter: "Muscles" })
+    .skip((page - 1) * limit)
+    .limit(limit);
+  break;
+
+  case 'equipment':
+  exercises = await Category.find({ filter: "Equipment" })
+    .skip((page - 1) * limit)
+    .limit(limit);
+  break;
+  }
+
+  res.status(200).json(exercises);
+};
 
 const getExercisesById = async (req, res) => {
   const { id } = req.params;
@@ -44,4 +78,5 @@ module.exports = {
     getAllExercises: ctrlWrapper(getAllExercises),
     getExercisesById: ctrlWrapper(getExercisesById),
     addExercise: ctrlWrapper(addExercise),
+    getSubcategoriesByCategory: ctrlWrapper(getSubcategoriesByCategory),
 };

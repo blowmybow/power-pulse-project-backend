@@ -4,8 +4,9 @@ const router = express.Router()
 const ctrl = require('../../controllers/exercises')
 const { validateBody, isValidId, authenticate } = require('../../middlewares')
 
-
 router.get('/', authenticate, ctrl.getAllExercises)
+
+router.get("/:category", authenticate, ctrl.getSubcategoriesByCategory);
 
 router.get('/:id', authenticate, isValidId, ctrl.getExercisesById)
 

@@ -45,9 +45,9 @@ const exerciseSchema = new Schema(
       },
       exercise: {
         type: Object,
-        
         required: true,
       },
+      
       time: {
         type: Number,
         required: true,
