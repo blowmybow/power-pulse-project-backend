@@ -22,6 +22,7 @@ const register = async (req, res) => {
 
   const hashPassword = await bcrypt.hash(password, 10);
   const avatarURL = gravatar.url(email);
+  console.log(avatarURL);
 
   const newUser = await User.create({
     ...req.body,
@@ -86,13 +87,13 @@ const updateParams = async (req, res) => {
   const userParams = {
     ...req.body,
   };
-
+  // console.log(userParams);
   const user = await User.findOneAndUpdate(
     { email },
     { userParams: userParams },
     { new: true }
   );
-
+  // console.log(user);
   const { desiredWeight, height, birthday, sex, levelActivity } =
     user.userParams;
 
@@ -103,7 +104,7 @@ const updateParams = async (req, res) => {
     sex,
     levelActivity
   );
-
+  // console.log(bmr);
   res.status(200).json({
     user: {
       name: user.name,

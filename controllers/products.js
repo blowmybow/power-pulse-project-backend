@@ -7,7 +7,7 @@ const getProducts = async (req, res) => {
   const {
     userParams: { blood },
   } = req.user;
-  console.log(req.user);
+  // console.log(req.user);
   const {
     page = 1,
     limit = 6,
@@ -15,7 +15,7 @@ const getProducts = async (req, res) => {
     category = "",
     search = "",
   } = req.query;
-  console.log(req.query);
+  // console.log(req.query);
   const skip = (page - 1) * limit;
   const filter = {};
   if (search) {
@@ -32,15 +32,15 @@ const getProducts = async (req, res) => {
       filter[`groupBloodNotAllowed.${blood}`] = true;
     }
   }
-  console.log(filter);
-  console.log(filter);
+
+  // console.log(filter);
   const result = await Product.find(filter, "", {
     skip,
     limit,
   });
-  console.log(result);
+  // console.log(result);
   const totalProducts = await Product.countDocuments(filter);
-  console.log(totalProducts);
+  // console.log(totalProducts);
   res.json({ page, limit, blood, totalProducts, result });
 };
 
