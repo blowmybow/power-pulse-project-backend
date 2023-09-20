@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 
-const CategorySchema = new Schema(
+const exercisesCategoriesSchema = new Schema(
     {
         filter: {
         type: String,
@@ -19,6 +19,6 @@ const CategorySchema = new Schema(
     { versionKey: false, timestamps: true }
   );
   
-  const Category = model('filters', CategorySchema);
+  const ExercisesCategories = model('filters', exercisesCategoriesSchema);
   
-  module.exports = Category;
+  module.exports = ExercisesCategories;

@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/api/auth", authRouter);
-app.use("/api/exercises", exercisesRouter);
+app.use("/exercises", exercisesRouter);
 app.use("/products", productsRouter);
 app.use("/statistics", statisticsRouter);
 
