@@ -5,6 +5,9 @@ require("dotenv").config();
 
 const exercisesRouter = require('./routes/api/exercises')
 const authRouter = require("./routes/api/auth");
+const productsRouter = require("./routes/api/products");
+const statisticsRouter = require("./routes/api/statistics");
+
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -16,6 +19,8 @@ app.use(express.static("public"));
 
 app.use("/api/auth", authRouter);
 app.use("/api/exercises", exercisesRouter);
+app.use("/products", productsRouter);
+app.use("/statistics", statisticsRouter);
 
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
