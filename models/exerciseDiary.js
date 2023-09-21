@@ -10,7 +10,7 @@ const exerciseDiarySchema = new Schema({
     required: true,
   },
   date: {
-    type: Date,
+    type: String,
     format: "dd/mm/YYYY",
     required: true,
   },
