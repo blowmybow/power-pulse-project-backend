@@ -17,7 +17,6 @@ router.delete("/:product", authenticate, ctrl.deleteDatedProducts);
 module.exports = router;
 //1234Asd
 //{
-//   "name": "Andrii2",
 //   "email": "andrii2@gmail.com",
 //   "password": "1234Asd"
 // }
