@@ -21,7 +21,7 @@ const userParamsSchema = new Schema(
       min: 35,
     },
     birthday: {
-      type: Date,
+      type: String,
       validate: {
         validator: function (birthday) {
           const today = new Date();
