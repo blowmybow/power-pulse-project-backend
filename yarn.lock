@@ -2166,7 +2166,7 @@
     "jest-message-util" "^29.7.0"
     "jest-util" "^29.7.0"
 
-"express@4.17.1":
+"express@>=4.0.0 || >=5.0.0-beta", "express@4.17.1":
   "integrity" "sha512-mHJ9O79RqluphRrcw2X/GTh3k9tVv8YcoyY4Kkh4WDMUYKRZUq0h1o0w2rrrxBqM7VoeUVqgb27xlEMXTnYt4g=="
   "resolved" "https://registry.npmjs.org/express/-/express-4.17.1.tgz"
   "version" "4.17.1"
@@ -4653,6 +4653,18 @@
   "version" "8.1.1"
   dependencies:
     "has-flag" "^4.0.0"
+
+"swagger-ui-dist@>=5.0.0":
+  "integrity" "sha512-mVZc9QVQ6pTCV5crli3+Ng+DoMPwdtMHK8QLk2oX8Mtamp4D/hV+uYdC3lV0JZrDgpNEcjs0RrWTqMwwosuLPQ=="
+  "resolved" "https://registry.npmjs.org/swagger-ui-dist/-/swagger-ui-dist-5.7.2.tgz"
+  "version" "5.7.2"
+
+"swagger-ui-express@^5.0.0":
+  "integrity" "sha512-tsU9tODVvhyfkNSvf03E6FAk+z+5cU3lXAzMy6Pv4av2Gt2xA0++fogwC4qo19XuFf6hdxevPuVCSKFuMHJhFA=="
+  "resolved" "https://registry.npmjs.org/swagger-ui-express/-/swagger-ui-express-5.0.0.tgz"
+  "version" "5.0.0"
+  dependencies:
+    "swagger-ui-dist" ">=5.0.0"
 
 "table@^6.0.4":
   "integrity" "sha512-LFNeryOqiQHqCVKzhkymKwt6ozeRhlm8IL1mE8rNUurkir4heF6PzMyRgaTa4tlyPTGGgXuvVOF/OLWiH09Lqw=="

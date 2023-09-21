@@ -1,0 +1,669 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "power-pulse-project-backend",
+    "version": "1.0.0"
+  },
+  "servers": [
+    { "url": "https://power-pulse-project-backend.onrender.com" },
+    { "url": "http://localhost:3000" }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    }
+  ],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "description": "Register a new user in the system",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User successfully registered"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "summary": "User authentication",
+        "description": "Authenticate a user in the system",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful login"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "summary": "User logout",
+        "description": "Log a user out of the system",
+        "responses": {
+          "200": {
+            "description": "Successful logout"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/auth/current": {
+      "get": {
+        "summary": "Get the current user",
+        "description": "Retrieve data about the currently authorized user",
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/auth/update-params": {
+      "put": {
+        "summary": "Update user parameters",
+        "description": "Update user parameters",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserParams"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User parameters successfully updated"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/auth/update-username": {
+      "patch": {
+        "summary": "Update user's name",
+        "description": "Update user's name",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUsername"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User's name successfully updated"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/auth/update-avatar": {
+      "patch": {
+        "summary": "Update user's avatar",
+        "description": "Update user's avatar",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatarData": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User's avatar successfully updated"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/exercises": {
+      "get": {
+        "summary": "Get all exercises",
+        "description": "Get a list of all exercises",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Exercise"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a new exercise",
+        "description": "Add a new exercise to the database",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExerciseData"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Exercise successfully added"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/exercises/bodyparts": {
+      "get": {
+        "summary": "Get all muscle groups (body parts)",
+        "description": "Get a list of all muscle groups (body parts)",
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BodyPart"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/exercises/muscules": {
+      "get": {
+        "summary": "Get all muscles",
+        "description": "Get a list of all muscles",
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Muscule"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/exercises/equipments": {
+      "get": {
+        "summary": "Get all types of equipment",
+        "description": "Get a list of all types of equipment",
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Equipment"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/exercises/{id}": {
+      "get": {
+        "summary": "Get an exercise by ID",
+        "description": "Get an exercise from the database by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Exercise"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Exercise not found"
+          }
+        }
+      }
+    },
+    "/api/products": {
+      "get": {
+        "summary": "Get a list of products",
+        "description": "Get a list of products with filtering and pagination options",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "recommended",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["all", "true", "false"]
+            }
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "page": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    },
+                    "blood": {
+                      "type": "string"
+                    },
+                    "totalProducts": {
+                      "type": "integer"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/api/products/categories": {
+      "get": {
+        "summary": "Get product categories",
+        "description": "Get a list of product categories",
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductsCategory"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/statistics": {
+      "get": {
+        "summary": "Get statistics",
+        "description": "Get overall statistics about products and users",
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "allProduct": {
+                      "type": "integer"
+                    },
+                    "allUser": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Exercise": {
+        "type": "object",
+        "properties": {
+          "bodyPart": {
+            "type": "string"
+          },
+          "equipment": {
+            "type": "string"
+          },
+          "gifUrl": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "burnedCalories": {
+            "type": "number"
+          },
+          "time": {
+            "type": "number"
+          }
+        }
+      },
+      "BodyPart": {
+        "type": "object",
+        "properties": {
+          "filter": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "imgURL": {
+            "type": "string"
+          }
+        }
+      },
+      "Muscule": {
+        "type": "object",
+        "properties": {
+          "filter": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "imgURL": {
+            "type": "string"
+          }
+        }
+      },
+      "Equipment": {
+        "type": "object",
+        "properties": {
+          "filter": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "imgURL": {
+            "type": "string"
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          }
+        }
+      },
+      "ProductsCategory": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string"
+          },
+          "avatarURL": {
+            "type": "string"
+          },
+          "userParams": {
+            "type": "object"
+          }
+        }
+      },
+      "UserParams": {
+        "type": "object",
+        "properties": {
+          "height": {
+            "type": "number"
+          },
+          "currentWeight": {
+            "type": "number"
+          },
+          "desiredWeight": {
+            "type": "number"
+          },
+          "birthday": {
+            "type": "string"
+          },
+          "blood": {
+            "type": "number"
+          },
+          "sex": {
+            "type": "string"
+          },
+          "levelActivity": {
+            "type": "number"
+          }
+        }
+      },
+      "LoginUser": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "UpdateUsername": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "ExerciseData": {
+        "type": "object",
+        "properties": {
+          "bodyPart": {
+            "type": "string"
+          },
+          "equipment": {
+            "type": "string"
+          },
+          "gifUrl": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "burnedCalories": {
+            "type": "number"
+          },
+          "time": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}
