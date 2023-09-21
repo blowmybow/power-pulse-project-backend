@@ -190,6 +190,7 @@ const updateAvatar = async (req, res) => {
       avatar: user.avatarUrl,
     },
   });
+  // spare option!!
   // if (!req.file) {
   //   throw HttpError(400, "Avatar must be provided");
   // }
