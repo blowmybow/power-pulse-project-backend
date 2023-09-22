@@ -7,6 +7,7 @@ const swaggerDocument = require("./swagger.json");
 
 const exercisesRouter = require("./routes/api/exercises");
 const authRouter = require("./routes/api/auth");
+const usersRouter = require("./routes/api/users");
 const productsRouter = require("./routes/api/products");
 const statisticsRouter = require("./routes/api/statistics");
 const productsDiaryRouter = require("./routes/api/productsDiary");
@@ -22,6 +23,7 @@ app.use(express.json());
 app.use(express.static("public"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/auth", authRouter);
+app.use("/users", usersRouter);
 app.use("/exercises", exercisesRouter);
 app.use("/products", productsRouter);
 app.use("/statistics", statisticsRouter);
