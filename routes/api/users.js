@@ -20,12 +20,12 @@ router.put(
   ctrl.updateParams
 );
 router.get("/params", authenticate, ctrl.getParams);
-// router.patch(
-//   "/username",
-//   authenticate,
-//   validateBody(schemas.updateUsername),
-//   ctrl.updateUsername
-// );
+router.patch(
+  "/username",
+  authenticate,
+  validateBody(schemas.updateUsername),
+  ctrl.updateUsername
+);
 router.patch(
   "/avatars",
   authenticate,
