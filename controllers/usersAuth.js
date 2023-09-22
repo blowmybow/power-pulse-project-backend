@@ -71,11 +71,7 @@ const login = async (req, res) => {
 
   res.json({
     token,
-    user: {
-      name: user.name,
-      email: user.email,
-      userParams: user.userParams,
-    },
+    user,
   });
 };
 
@@ -85,7 +81,8 @@ const updateParams = async (req, res) => {
   const userParams = {
     ...req.body,
   };
-  // console.log(userParams);
+
+  // console.log(userParams.birthday);
   const user = await User.findOneAndUpdate(
     { email },
     { userParams: userParams },
@@ -102,7 +99,11 @@ const updateParams = async (req, res) => {
     sex,
     levelActivity
   );
-  // console.log(bmr);
+
+
+
+  
+  console.log(birthday);
   res.status(200).json({
     user: {
       name: user.name,
