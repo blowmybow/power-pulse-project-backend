@@ -32,7 +32,7 @@ const updateParams = async (req, res) => {
   );
 
   res.status(200).json({
-    userParams: user.userParams,
+    user: { userParams: user.userParams },
     bmr,
   });
 };
