@@ -12,19 +12,40 @@
     {
       "name": "Auth",
       "description": "Authorization endpoints"
+    },
+    {
+      "name": "User",
+      "description": "User endpoints"
+    },
+    {
+      "name": "Exercises",
+      "description": "Exercises endpoints"
+    },
+    {
+      "name": "Diary",
+      "description": "Diary endpoints"
+    },
+    {
+      "name": "Products",
+      "description": "Products endpoints"
+    },
+    {
+      "name": "Statistics",
+      "description": "Statistics endpoints"
     }
   ],
   "paths": {
     "/auth/register": {
       "post": {
         "summary": "Register a new user",
+        "tags":["Auth"],
         "description": "Register a new user in the system",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/RegisterUser"
               }
             }
           }
@@ -42,6 +63,7 @@
     "/auth/login": {
       "post": {
         "summary": "User authentication",
+         "tags":["Auth"],
         "description": "Authenticate a user in the system",
         "requestBody": {
           "required": true,
@@ -66,6 +88,7 @@
     "/auth/logout": {
       "post": {
         "summary": "User logout",
+        "tags":["Auth"],
         "description": "Log a user out of the system",
         "responses": {
           "200": {
@@ -77,9 +100,10 @@
         }
       }
     },
-    "/auth/current": {
+    "/users/current": {
       "get": {
         "summary": "Get the current user",
+        "tags":["User"],
         "description": "Retrieve data about the currently authorized user",
         "responses": {
           "200": {
@@ -98,9 +122,10 @@
         }
       }
     },
-    "/auth/update-params": {
+    "/users/update-params": {
       "put": {
         "summary": "Update user parameters",
+        "tags":["User"],
         "description": "Update user parameters",
         "requestBody": {
           "required": true,
@@ -122,9 +147,10 @@
         }
       }
     },
-    "/auth/update-username": {
+    "/users/update-username": {
       "patch": {
         "summary": "Update user's name",
+        "tags":["User"],
         "description": "Update user's name",
         "requestBody": {
           "required": true,
@@ -146,9 +172,10 @@
         }
       }
     },
-    "/auth/update-avatar": {
+    "/users/update-avatar": {
       "patch": {
         "summary": "Update user's avatar",
+        "tags":["User"],
         "description": "Update user's avatar",
         "requestBody": {
           "required": true,
@@ -179,6 +206,7 @@
     "/exercises": {
       "get": {
         "summary": "Get all exercises",
+        "tags":["Exercises"],
         "description": "Get a list of all exercises",
         "parameters": [
           {
@@ -219,6 +247,7 @@
       },
       "post": {
         "summary": "Add a new exercise",
+        "tags":["Exercises"],
         "description": "Add a new exercise to the database",
         "requestBody": {
           "required": true,
@@ -249,6 +278,7 @@
     "/exercises/bodyparts": {
       "get": {
         "summary": "Get all muscle groups (body parts)",
+         "tags":["Exercises"],
         "description": "Get a list of all muscle groups (body parts)",
         "responses": {
           "200": {
@@ -273,6 +303,7 @@
     "/exercises/muscles": {
       "get": {
         "summary": "Get all muscles",
+         "tags":["Exercises"],
         "description": "Get a list of all muscles",
         "responses": {
           "200": {
@@ -297,6 +328,7 @@
     "/exercises/equipments": {
       "get": {
         "summary": "Get all types of equipment",
+         "tags":["Exercises"],
         "description": "Get a list of all types of equipment",
         "responses": {
           "200": {
@@ -321,6 +353,7 @@
     "/exercises/{id}": {
       "get": {
         "summary": "Get an exercise by ID",
+         "tags":["Exercises"],
         "description": "Get an exercise from the database by ID",
         "parameters": [
           {
@@ -352,9 +385,114 @@
         }
       }
     },
+    "/exercises_diary": {
+      "get": {
+        "summary": "Get dated exercises",
+        "tags":["Diary"],
+        "description": "Get a list of dated exercises with filtering and pagination options",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ExerciseDiary"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add a dated exercise",
+        "tags":["Diary"],
+        "description": "Add a dated exercise to the diary",
+        "requestBody": {
+          "description": "Exercise data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExerciseDiary"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Exercise added successfully"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          }
+        }
+      }
+    },
+    "/exercises_diary/{date}/{exercise}": {
+      "delete": {
+        "summary": "Delete a dated exercise",
+         "tags":["Diary"],
+        "description": "Delete a dated exercise from the diary by date and exercise ID",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
+          {
+            "name": "exercise",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Exercise deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Exercise not found"
+          }
+        }
+      }
+    },
     "/products": {
       "get": {
         "summary": "Get a list of products",
+         "tags":["Products"],
         "description": "Get a list of products with filtering and pagination options",
         "parameters": [
           {
@@ -439,6 +577,7 @@
     "/products/categories": {
       "get": {
         "summary": "Get product categories",
+        "tags":["Products"],
         "description": "Get a list of product categories",
         "responses": {
           "200": {
@@ -457,136 +596,10 @@
         }
       }
     },
-    "/statistics": {
-      "get": {
-        "summary": "Get statistics",
-        "description": "Get overall statistics about products and users",
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "allProduct": {
-                      "type": "integer"
-                    },
-                    "allUser": {
-                      "type": "integer"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/exercises_diary": {
-      "get": {
-        "summary": "Get dated exercises",
-        "description": "Get a list of dated exercises with filtering and pagination options",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ExerciseDiary"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized request"
-          }
-        }
-      },
-      "post": {
-        "summary": "Add a dated exercise",
-        "description": "Add a dated exercise to the diary",
-        "requestBody": {
-          "description": "Exercise data",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ExerciseDiary"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "Exercise added successfully"
-          },
-          "401": {
-            "description": "Unauthorized request"
-          }
-        }
-      }
-    },
-    "/exercises_diary/{date}/{exercise}": {
-      "delete": {
-        "summary": "Delete a dated exercise",
-        "description": "Delete a dated exercise from the diary by date and exercise ID",
-        "parameters": [
-          {
-            "name": "date",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "format": "date"
-            }
-          },
-          {
-            "name": "exercise",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Exercise deleted successfully"
-          },
-          "401": {
-            "description": "Unauthorized request"
-          },
-          "404": {
-            "description": "Exercise not found"
-          }
-        }
-      }
-    },
     "/products_diary": {
       "get": {
         "summary": "Get dated products",
+        "tags":["Diary"],
         "description": "Get a list of dated products with filtering and pagination options",
         "parameters": [
           {
@@ -627,6 +640,7 @@
       },
       "post": {
         "summary": "Add a dated product",
+        "tags":["Diary"],
         "description": "Add a dated product to the diary",
         "requestBody": {
           "description": "Product data",
@@ -652,6 +666,7 @@
     "/products_diary/{date}/{product}": {
       "delete": {
         "summary": "Delete a dated product",
+        "tags":["Diary"],
         "description": "Delete a dated product from the diary by date and product ID",
         "parameters": [
           {
@@ -684,7 +699,34 @@
           }
         }
       }
-    }
+    },
+    "/statistics": {
+      "get": {
+        "summary": "Get statistics",
+        "tags":["Statistics"],
+        "description": "Get overall statistics about products and users",
+        "responses": {
+          "200": {
+            "description": "Successful request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "allProduct": {
+                      "type": "integer"
+                    },
+                    "allUser": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }    
   },
   "components": {
     "schemas": {
@@ -774,6 +816,7 @@
       },
       "User": {
         "type": "object",
+        "required": ["name", "email", "password"],
         "properties": {
           "name": {
             "type": "string"
@@ -821,19 +864,41 @@
           }
         }
       },
-      "LoginUser": {
+      "RegisterUser": {
         "type": "object",
+        "required": ["name", "email", "password"],
         "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "User's email"
           },
           "password": {
-            "type": "string"
+            "type": "string",
+            "description": "User's password"
+          }
+        }
+      },
+      "LoginUser": {
+        "type": "object",
+        "required": [ "email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password"
           }
         }
       },
       "UpdateUsername": {
         "type": "object",
+        "required": ["name"],
         "properties": {
           "name": {
             "type": "string"
