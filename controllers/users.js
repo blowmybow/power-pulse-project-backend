@@ -80,7 +80,8 @@ const getCurrent = async (req, res) => {
   const { name, email, avatarURL, token, userParams } = req.user;
 
   res.json({
-    user: { name, email },
+    name,
+    email,
     avatarURL,
     token,
     userParams,
