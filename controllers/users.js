@@ -32,10 +32,7 @@ const updateParams = async (req, res) => {
   );
 
   res.status(200).json({
-    user: {
-      name: user.name,
-      userParams: user.userParams,
-    },
+    userParams,
     bmr,
   });
 };
@@ -65,16 +62,16 @@ const getParams = async (req, res) => {
   });
 };
 
-const updateUsername = async (req, res) => {
-  const { email } = req.user;
-  const user = await User.findOneAndUpdate({ email }, req.body, { new: true });
+// const updateUsername = async (req, res) => {
+//   const { email } = req.user;
+//   const user = await User.findOneAndUpdate({ email }, req.body, { new: true });
 
-  res.status(200).json({
-    user: {
-      name: user.name,
-    },
-  });
-};
+//   res.status(200).json({
+//     user: {
+//       name: user.name,
+//     },
+//   });
+// };
 
 const getCurrent = async (req, res) => {
   const { name, email, avatarURL, token, userParams } = req.user;
@@ -134,6 +131,6 @@ module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
   updateParams: ctrlWrapper(updateParams),
   getParams: ctrlWrapper(getParams),
-  updateUsername: ctrlWrapper(updateUsername),
+  // updateUsername: ctrlWrapper(updateUsername),
   updateAvatar: ctrlWrapper(updateAvatar),
 };
