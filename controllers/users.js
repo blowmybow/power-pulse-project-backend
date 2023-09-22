@@ -77,11 +77,12 @@ const updateUsername = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { name, email, avatarURL, userParams } = req.user;
+  const { name, email, avatarURL, token, userParams } = req.user;
 
   res.json({
     user: { name, email },
     avatarURL,
+    token,
     userParams,
   });
 };
