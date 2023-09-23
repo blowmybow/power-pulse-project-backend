@@ -2,10 +2,11 @@ const Product = require("../models/product");
 const ProductsCategories = require("../models/productsCategories");
 
 const ctrlWrapper = require("../helpers/ctrlWrapper");
+const { HttpError } = require("../helpers");
 
 const getProducts = async (req, res) => {
   const {
-    userParams: { blood },
+    userParams: { blood = 0 },
   } = req.user;
   // console.log(req.user);
   const {
@@ -15,7 +16,7 @@ const getProducts = async (req, res) => {
     category = "",
     search = "",
   } = req.query;
-  // console.log(req.query);
+
   const skip = (page - 1) * limit;
   const filter = {};
   if (search) {
@@ -38,6 +39,9 @@ const getProducts = async (req, res) => {
     skip,
     limit,
   });
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
   // console.log(result);
   const totalProducts = await Product.countDocuments(filter);
   // console.log(totalProducts);
@@ -46,10 +50,25 @@ const getProducts = async (req, res) => {
 
 const productsCategories = async (req, res) => {
   const result = await ProductsCategories.find();
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
   res.json(result);
+};
+
+const getProductById = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const result = await Product.findById(id);
+  console.log(result);
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.status(200).json(result);
 };
 
 module.exports = {
   getProducts: ctrlWrapper(getProducts),
   productsCategories: ctrlWrapper(productsCategories),
+  getProductById: ctrlWrapper(getProductById),
 };
