@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "power-pulse-project-backend",
-    "version": "1.0.0"
+    "version": "2.0.1"
   },
   "servers": [
     { "url": "https://power-pulse-project-backend.onrender.com" },
@@ -122,11 +122,60 @@
         }
       }
     },
-    "/users/update-params": {
+    "/users/params": {
+      "get": {
+        "summary": "Get user parameters",
+        "tags":["User"],
+        "description": "Endpoint to get user parameters",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserParams"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "post": {
+        "summary": "Add user parameters",
+        "tags":["User"],
+        "description": "Endpoint to add user parameters",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserParams"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A successful response"
+          },
+          "400": {
+            "description": "Bad request, invalid input data"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
       "put": {
         "summary": "Update user parameters",
         "tags":["User"],
-        "description": "Update user parameters",
+        "description": "Endpoint to update user parameters",
         "requestBody": {
           "required": true,
           "content": {
@@ -147,7 +196,7 @@
         }
       }
     },
-    "/users/update-username": {
+    "/users/username": {
       "patch": {
         "summary": "Update user's name",
         "tags":["User"],
@@ -172,7 +221,7 @@
         }
       }
     },
-    "/users/update-avatar": {
+    "/users/avatars": {
       "patch": {
         "summary": "Update user's avatar",
         "tags":["User"],

@@ -32,9 +32,7 @@ const updateParams = async (req, res) => {
   );
 
   res.status(200).json({
-    user: {
-      userParams: user.userParams,
-    },
+    user,
     bmr,
   });
 };
@@ -66,24 +64,53 @@ const getParams = async (req, res) => {
 
 const updateUsername = async (req, res) => {
   const { email } = req.user;
-  const user = await User.findOneAndUpdate({ email }, req.body, { new: true });
+  const userParams = {
+    ...req.body,
+  };
+
+  const user = await User.findOneAndUpdate(
+    { email },
+    { userParams: userParams },
+    req.body,
+    { new: true }
+  );
+
+  const { desiredWeight, height, birthday, sex, levelActivity } =
+    user.userParams;
+
+  const bmr = dailyCaloriesCalc(
+    desiredWeight,
+    height,
+    birthday,
+    sex,
+    levelActivity
+  );
 
   res.status(200).json({
-    user: {
-      name: user.name,
-    },
+    user,
+    bmr,
   });
 };
 
 const getCurrent = async (req, res) => {
   const { name, email, avatarURL, token, userParams } = req.user;
 
+  const { desiredWeight, height, birthday, sex, levelActivity } = userParams;
+
+  const bmr = dailyCaloriesCalc(
+    desiredWeight,
+    height,
+    birthday,
+    sex,
+    levelActivity
+  );
   res.json({
     name,
     email,
     avatarURL,
     token,
     userParams,
+    bmr,
   });
 };
 
