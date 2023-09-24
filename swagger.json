@@ -38,7 +38,7 @@
     "/auth/register": {
       "post": {
         "summary": "Register a new user",
-        "tags":["Auth"],
+        "tags": ["Auth"],
         "description": "Register a new user in the system",
         "requestBody": {
           "required": true,
@@ -63,7 +63,7 @@
     "/auth/login": {
       "post": {
         "summary": "User authentication",
-         "tags":["Auth"],
+        "tags": ["Auth"],
         "description": "Authenticate a user in the system",
         "requestBody": {
           "required": true,
@@ -88,7 +88,7 @@
     "/auth/logout": {
       "post": {
         "summary": "User logout",
-        "tags":["Auth"],
+        "tags": ["Auth"],
         "description": "Log a user out of the system",
         "responses": {
           "200": {
@@ -103,7 +103,7 @@
     "/users/current": {
       "get": {
         "summary": "Get the current user",
-        "tags":["User"],
+        "tags": ["User"],
         "description": "Retrieve data about the currently authorized user",
         "responses": {
           "200": {
@@ -125,7 +125,7 @@
     "/users/params": {
       "get": {
         "summary": "Get user parameters",
-        "tags":["User"],
+        "tags": ["User"],
         "description": "Endpoint to get user parameters",
         "requestBody": {
           "required": true,
@@ -148,7 +148,7 @@
       },
       "post": {
         "summary": "Add user parameters",
-        "tags":["User"],
+        "tags": ["User"],
         "description": "Endpoint to add user parameters",
         "requestBody": {
           "required": true,
@@ -174,7 +174,7 @@
       },
       "put": {
         "summary": "Update user parameters",
-        "tags":["User"],
+        "tags": ["User"],
         "description": "Endpoint to update user parameters",
         "requestBody": {
           "required": true,
@@ -199,7 +199,7 @@
     "/users/username": {
       "patch": {
         "summary": "Update user's name",
-        "tags":["User"],
+        "tags": ["User"],
         "description": "Update user's name",
         "requestBody": {
           "required": true,
@@ -224,7 +224,7 @@
     "/users/avatars": {
       "patch": {
         "summary": "Update user's avatar",
-        "tags":["User"],
+        "tags": ["User"],
         "description": "Update user's avatar",
         "requestBody": {
           "required": true,
@@ -255,7 +255,7 @@
     "/exercises": {
       "get": {
         "summary": "Get all exercises",
-        "tags":["Exercises"],
+        "tags": ["Exercises"],
         "description": "Get a list of all exercises",
         "parameters": [
           {
@@ -296,7 +296,7 @@
       },
       "post": {
         "summary": "Add a new exercise",
-        "tags":["Exercises"],
+        "tags": ["Exercises"],
         "description": "Add a new exercise to the database",
         "requestBody": {
           "required": true,
@@ -327,7 +327,7 @@
     "/exercises/bodyparts": {
       "get": {
         "summary": "Get all muscle groups (body parts)",
-         "tags":["Exercises"],
+        "tags": ["Exercises"],
         "description": "Get a list of all muscle groups (body parts)",
         "responses": {
           "200": {
@@ -352,7 +352,7 @@
     "/exercises/muscles": {
       "get": {
         "summary": "Get all muscles",
-         "tags":["Exercises"],
+        "tags": ["Exercises"],
         "description": "Get a list of all muscles",
         "responses": {
           "200": {
@@ -377,7 +377,7 @@
     "/exercises/equipments": {
       "get": {
         "summary": "Get all types of equipment",
-         "tags":["Exercises"],
+        "tags": ["Exercises"],
         "description": "Get a list of all types of equipment",
         "responses": {
           "200": {
@@ -402,7 +402,7 @@
     "/exercises/{id}": {
       "get": {
         "summary": "Get an exercise by ID",
-         "tags":["Exercises"],
+        "tags": ["Exercises"],
         "description": "Get an exercise from the database by ID",
         "parameters": [
           {
@@ -437,7 +437,7 @@
     "/exercises_diary": {
       "get": {
         "summary": "Get dated exercises",
-        "tags":["Diary"],
+        "tags": ["Diary"],
         "description": "Get a list of dated exercises with filtering and pagination options",
         "parameters": [
           {
@@ -478,7 +478,7 @@
       },
       "post": {
         "summary": "Add a dated exercise",
-        "tags":["Diary"],
+        "tags": ["Diary"],
         "description": "Add a dated exercise to the diary",
         "requestBody": {
           "description": "Exercise data",
@@ -504,7 +504,7 @@
     "/exercises_diary/{date}/{exercise}": {
       "delete": {
         "summary": "Delete a dated exercise",
-         "tags":["Diary"],
+        "tags": ["Diary"],
         "description": "Delete a dated exercise from the diary by date and exercise ID",
         "parameters": [
           {
@@ -541,7 +541,7 @@
     "/products": {
       "get": {
         "summary": "Get a list of products",
-         "tags":["Products"],
+        "tags": ["Products"],
         "description": "Get a list of products with filtering and pagination options",
         "parameters": [
           {
@@ -623,10 +623,45 @@
         }
       }
     },
+    "/products/{id}": {
+      "get": {
+        "summary": "Get a product by ID",
+        "tags": ["Products"],
+        "description": "Get a product by its unique ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Product retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Product"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        }
+      }
+    },
     "/products/categories": {
       "get": {
         "summary": "Get product categories",
-        "tags":["Products"],
+        "tags": ["Products"],
         "description": "Get a list of product categories",
         "responses": {
           "200": {
@@ -641,6 +676,9 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized request"
           }
         }
       }
@@ -648,7 +686,7 @@
     "/products_diary": {
       "get": {
         "summary": "Get dated products",
-        "tags":["Diary"],
+        "tags": ["Diary"],
         "description": "Get a list of dated products with filtering and pagination options",
         "parameters": [
           {
@@ -689,7 +727,7 @@
       },
       "post": {
         "summary": "Add a dated product",
-        "tags":["Diary"],
+        "tags": ["Diary"],
         "description": "Add a dated product to the diary",
         "requestBody": {
           "description": "Product data",
@@ -715,7 +753,7 @@
     "/products_diary/{date}/{product}": {
       "delete": {
         "summary": "Delete a dated product",
-        "tags":["Diary"],
+        "tags": ["Diary"],
         "description": "Delete a dated product from the diary by date and product ID",
         "parameters": [
           {
@@ -752,30 +790,25 @@
     "/statistics": {
       "get": {
         "summary": "Get statistics",
-        "tags":["Statistics"],
-        "description": "Get overall statistics about products and users",
+        "tags": ["Statistics"],
+        "description": "Get statistics data including user count, exercise count, and more.",
         "responses": {
           "200": {
-            "description": "Successful request",
+            "description": "Statistics retrieved successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "allProduct": {
-                      "type": "integer"
-                    },
-                    "allUser": {
-                      "type": "integer"
-                    }
-                  }
+                  "$ref": "#/components/schemas/StatisticsResult"
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized request"
           }
         }
       }
-    }    
+    }
   },
   "components": {
     "schemas": {
@@ -850,16 +883,89 @@
       "Product": {
         "type": "object",
         "properties": {
-          "owner": {
-            "type": "string"
+          "_id": {
+            "type": "string",
+            "example": "5d51694902b2373622ff5773",
+            "description": "Unique identifier for the product"
+          },
+          "weight": {
+            "type": "number",
+            "example": 100,
+            "description": "Weight of the product in grams"
+          },
+          "calories": {
+            "type": "number",
+            "example": 340,
+            "description": "Calories in the product"
+          },
+          "category": {
+            "type": "string",
+            "example": "dairy",
+            "description": "Category of the product"
+          },
+          "title": {
+            "type": "string",
+            "example": "Danbo cheese",
+            "description": "Title of the product"
+          },
+          "groupBloodNotAllowed": {
+            "type": "object",
+            "properties": {
+              "1": {
+                "type": "boolean",
+                "example": true,
+                "description": "Blood group 1 not allowed flag"
+              },
+              "2": {
+                "type": "boolean",
+                "example": true,
+                "description": "Blood group 2 not allowed flag"
+              },
+              "3": {
+                "type": "boolean",
+                "example": false,
+                "description": "Blood group 3 not allowed flag"
+              },
+              "4": {
+                "type": "boolean",
+                "example": false,
+                "description": "Blood group 4 not allowed flag"
+              }
+            },
+            "description": "Blood groups not allowed for consumption"
           }
         }
       },
       "ProductsCategory": {
         "type": "object",
         "properties": {
-          "owner": {
-            "type": "string"
+          "productsCategories": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "alcoholic drinks",
+              "berries",
+              "cereals",
+              "dairy",
+              "dried fruits",
+              "eggs",
+              "fish",
+              "flour",
+              "fruits",
+              "meat",
+              "mushrooms",
+              "nuts",
+              "oils and fats",
+              "poppy",
+              "sausage",
+              "seeds",
+              "sesame",
+              "soft drinks",
+              "vegetables and herbs"
+            ],
+            "description": "List of product categories"
           }
         }
       },
@@ -933,7 +1039,7 @@
       },
       "LoginUser": {
         "type": "object",
-        "required": [ "email", "password"],
+        "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
@@ -1019,6 +1125,26 @@
           },
           "owner": {
             "type": "string"
+          }
+        }
+      },
+      "StatisticsResult": {
+        "type": "object",
+        "properties": {
+          "allUser": {
+            "type": "integer"
+          },
+          "exercisesVideo": {
+            "type": "integer"
+          },
+          "exercisesDone": {
+            "type": "integer"
+          },
+          "allCalories": {
+            "type": "integer"
+          },
+          "allTime": {
+            "type": "integer"
           }
         }
       }
