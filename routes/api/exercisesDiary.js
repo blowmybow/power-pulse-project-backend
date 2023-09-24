@@ -4,15 +4,20 @@ const ctrl = require("../../controllers/exercisesDiary");
 
 const { validateBody, authenticate } = require("../../middlewares");
 
-const {schemas} = require("../../models/exerciseDiary");
+const { schemas } = require("../../models/exerciseDiary");
 
 const router = express.Router();
 
-router.get("/", authenticate, ctrl.getDatedExercise);
+router.get("/:date", authenticate, ctrl.getDatedExercise);
 
-router.post("/", authenticate, validateBody(schemas.addExerciseDiarySchema), ctrl.addDatedExercise);
+router.post(
+  "/",
+  authenticate,
+  validateBody(schemas.addExerciseDiarySchema),
+  ctrl.addDatedExercise
+);
 
-router.delete("/:exercise", authenticate, ctrl.deleteDatedExercise);
+router.delete("/:exercise/:date", authenticate, ctrl.deleteDatedExercise);
 
 module.exports = router;
 //1234Asd
