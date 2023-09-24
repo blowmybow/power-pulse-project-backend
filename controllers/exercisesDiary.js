@@ -1,6 +1,7 @@
 const { ExerciseDiary } = require("../models/exerciseDiary");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
+const { Exercise } = require("../models/exercise");
 
 const getDatedExercise = async (req, res) => {
   const { _id: owner } = req.user;
@@ -14,8 +15,21 @@ const getDatedExercise = async (req, res) => {
       skip,
       limit,
     }
-  );
+  ).lean();
+  for (const obj of result) {
+    const exerciseId = obj.exerciseId;
+    const exercise = await getExerciseById(exerciseId);
+    obj.exercise = exercise;
+  }
   res.json(result);
+};
+
+const getExerciseById = async (id) => {
+  const result = await Exercise.findById(id);
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  return result;
 };
 
 const addDatedExercise = async (req, res) => {

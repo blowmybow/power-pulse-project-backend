@@ -1,4 +1,5 @@
 const { ProductDiary } = require("../models/productsDiary");
+const Product = require("../models/product");
 
 const { HttpError, ctrlWrapper } = require("../helpers");
 
@@ -14,9 +15,25 @@ const getDatedProducts = async (req, res) => {
       skip,
       limit,
     }
-  );
-  console.log(result);
+  ).lean();
+
+  for (const obj of result) {
+    const productId = obj.productId;
+    const product = await getProductById(productId);
+    obj.product = product;
+  }
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
   res.json(result);
+};
+
+const getProductById = async (id) => {
+  const result = await Product.findById(id);
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  return result;
 };
 
 const addDateProduct = async (req, res) => {
@@ -29,14 +46,12 @@ const deleteDatedProducts = async (req, res) => {
   const { _id: owner } = req.user;
   const { date } = req.params;
   const { product } = req.params;
-  //   console.log(req.params);
   const result = await ProductDiary.findOneAndDelete({
     date: date,
     productId: product,
     owner: owner,
   });
-  //   console.log(result);
-  //   console.log(owner);
+
   if (!result) {
     throw HttpError(404, "Not found");
   }
