@@ -64,31 +64,12 @@ const getParams = async (req, res) => {
 
 const updateUsername = async (req, res) => {
   const { email } = req.user;
-  const userParams = {
-    ...req.body,
-  };
-
-  const user = await User.findOneAndUpdate(
-    { email },
-    { userParams: userParams },
-    req.body,
-    { new: true }
-  );
-
-  const { desiredWeight, height, birthday, sex, levelActivity } =
-    user.userParams;
-
-  const bmr = dailyCaloriesCalc(
-    desiredWeight,
-    height,
-    birthday,
-    sex,
-    levelActivity
-  );
+  const user = await User.findOneAndUpdate({ email }, req.body, { new: true });
 
   res.status(200).json({
-    user,
-    bmr,
+    user: {
+      name: user.name,
+    },
   });
 };
 
