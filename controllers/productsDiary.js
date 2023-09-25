@@ -17,15 +17,18 @@ const getDatedProducts = async (req, res) => {
     }
   ).lean();
 
+  let allCaloriesDay = 0;
   for (const obj of result) {
+    allCaloriesDay += obj.calories;
     const productId = obj.productId;
     const product = await getProductById(productId);
     obj.product = product;
   }
+
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.json(result);
+  res.json({ result, allCaloriesDay });
 };
 
 const getProductById = async (id) => {
