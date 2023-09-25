@@ -39,6 +39,7 @@ const register = async (req, res) => {
       email: newUser.email,
       avatarURL: newUser.avatarURL,
       userParams: newUser.userParams,
+      createdAt: newUser.createdAt,
     },
   });
 };
@@ -70,7 +71,13 @@ const login = async (req, res) => {
 
   res.json({
     token,
-    user,
+    user: {
+      name: user.name,
+      email: user.email,
+      avatarUrl: user.avatarURL,
+      userParams: user.userParams,
+      createdAt: user.createdAt,
+    },
   });
 };
 
