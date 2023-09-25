@@ -45,13 +45,9 @@ const addDatedExercise = async (req, res) => {
 };
 
 const deleteDatedExercise = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { date } = req.params;
-  const { exercise } = req.params;
+  const { exerciseIdUser } = req.params;
   const result = await ExerciseDiary.findOneAndDelete({
-    date: date,
-    exerciseId: exercise,
-    owner: owner,
+    _id: exerciseIdUser,
   });
   if (!result) {
     throw HttpError(404, "Not found");

@@ -46,13 +46,11 @@ const addDateProduct = async (req, res) => {
 };
 
 const deleteDatedProducts = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { date } = req.params;
-  const { product } = req.params;
+  // const { _id: owner } = req.user;
+  const { productIdUser } = req.params;
+  // const { product } = req.params;
   const result = await ProductDiary.findOneAndDelete({
-    date: date,
-    productId: product,
-    owner: owner,
+    _id: productIdUser,
   });
 
   if (!result) {
