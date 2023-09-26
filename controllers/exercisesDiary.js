@@ -17,9 +17,11 @@ const getDatedExercise = async (req, res) => {
     }
   ).lean();
   let allCaloriesDay = 0;
+  let allTimeDay = 0;
 
   for (const obj of result) {
     allCaloriesDay += obj.calories;
+    allTimeDay += obj.time;
     const exerciseId = obj.exerciseId;
     const exercise = await getExerciseById(exerciseId);
     obj.exercise = exercise;
@@ -27,7 +29,7 @@ const getDatedExercise = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.json({ result, allCaloriesDay });
+  res.json({ result, allCaloriesDay, allTimeDay });
 };
 
 const getExerciseById = async (id) => {
