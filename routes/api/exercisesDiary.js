@@ -17,19 +17,6 @@ router.post(
   ctrl.addDatedExercise
 );
 
-router.delete("/:exercise/:date", authenticate, ctrl.deleteDatedExercise);
+router.delete("/:exerciseIdUser", authenticate, ctrl.deleteDatedExercise);
 
 module.exports = router;
-//1234Asd
-//{
-//   "email": "andrii2@gmail.com",
-//   "password": "1234Asd"
-// }
-
-// {
-//   "exerciseId": "650431e442f30f1602062518",
-//   "date": "21/09/2023",
-//   "time": 10,
-//   "calories": 200,
-//   "owner": "650b2e786360fe740b811ccc",
-// }

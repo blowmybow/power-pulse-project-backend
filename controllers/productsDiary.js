@@ -17,15 +17,18 @@ const getDatedProducts = async (req, res) => {
     }
   ).lean();
 
+  let allCaloriesDay = 0;
   for (const obj of result) {
+    allCaloriesDay += obj.calories;
     const productId = obj.productId;
     const product = await getProductById(productId);
     obj.product = product;
   }
+
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  res.json(result);
+  res.json({ result, allCaloriesDay });
 };
 
 const getProductById = async (id) => {
@@ -43,13 +46,11 @@ const addDateProduct = async (req, res) => {
 };
 
 const deleteDatedProducts = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { date } = req.params;
-  const { product } = req.params;
+  // const { _id: owner } = req.user;
+  const { productIdUser } = req.params;
+  // const { product } = req.params;
   const result = await ProductDiary.findOneAndDelete({
-    date: date,
-    productId: product,
-    owner: owner,
+    _id: productIdUser,
   });
 
   if (!result) {
