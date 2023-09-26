@@ -33,6 +33,7 @@ const getDatedProducts = async (req, res) => {
     obj.product = product;
   }
 
+  result.allCaloriesDay = allCaloriesDay;
   if (!result) {
     throw HttpError(404, "Not found");
   }
