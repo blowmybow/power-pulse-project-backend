@@ -1,21 +1,31 @@
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
-const path = require("path");
 
-const tempDir = path.join(__dirname, "../", "temp");
-const avatarSize = 1048576;
+const cloudinary = require("../helpers");
 
-const multerConfig = multer.diskStorage({
-  destination: tempDir,
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-  limits: {
-    fileSize: avatarSize,
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    let folder;
+    if (file.fieldname === "avatar") {
+      folder = "avatars";
+    } else if (file.fieldname === "recipe") {
+      folder = "recipe";
+    } else {
+      folder = "misc";
+    }
+    return {
+      folder: folder,
+      allowed_formats: ["jpg", "png"],
+      public_id: file.originalname,
+      transformation: [
+        { width: 350, height: 350 },
+        { width: 700, height: 700 },
+      ],
+    };
   },
 });
 
-const upload = multer({
-  storage: multerConfig,
-});
+const upload = multer({ storage });
 
 module.exports = upload;

@@ -1,5 +1,4 @@
-const cloudinaryModule = require("cloudinary");
-const cloudinary = cloudinaryModule.v2;
+const cloudinary = require("cloudinary").v2;
 
 const { CLOUD_NAME, CLOUD_API_KEY, CLOUD_API_SECRET_KEY } = process.env;
 

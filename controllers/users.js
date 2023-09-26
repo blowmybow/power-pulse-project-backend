@@ -1,11 +1,11 @@
 // const path = require("path");
-const fs = require("fs/promises");
+// const fs = require("fs/promises");
 // const Jimp = require("jimp");
 
 const { User } = require("../models/user");
 const { ctrlWrapper, dailyCaloriesCalc } = require("../helpers");
 // const avatarDir = path.resolve("public", "avatars");
-const { cloudinary } = require("../helpers");
+// const { cloudinary } = require("../helpers");
 
 const updateParams = async (req, res) => {
   const { email } = req.user;
@@ -96,45 +96,53 @@ const getCurrent = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-  const { email, _id } = req.user;
-  const { path } = req.file;
-  const result = await cloudinary.uploader.upload(path, {
-    folder: "power_pulse_project_avatars",
-    public_id: _id,
-  });
-  const user = await User.findOneAndUpdate(
-    { email },
-    { avatarURL: result.url },
-    { new: true }
-  );
-  await fs.unlink(path);
-  res.status(200).json({
-    user: {
-      name: user.name,
-      avatar: user.avatarURL,
-    },
-  });
-  //   if (!req.file) {
-  //     throw HttpError(400, "Avatar must be provided");
-  //   }
-  //   const { _id } = req.user;
-  //   const { path: tempUpload, originalname } = req.file;
-  //   await Jimp.read(tempUpload)
-  //     .then((avatar) => {
-  //       return avatar.resize(250, 250).quality(60).write(tempUpload);
-  //     })
-  //     .catch((err) => {
-  //       throw err;
-  //     });
-  //   const fileName = `${_id}_${originalname}`;
-  //   const resultUpload = path.join(avatarDir, fileName);
-  //   await fs.rename(tempUpload, resultUpload);
-  //   const avatarURL = path.join("avatars", fileName);
-  //   await User.findByIdAndUpdate(_id, { avatarURL });
-  //   res.json({
-  //     avatarURL,
-  //   });
+  const avatarURL = req.file.path;
+  console.log(avatarURL);
+
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.status(200).json({ avatarURL });
 };
+// const { email, _id } = req.user;
+// const { path } = req.file;
+// const result = await cloudinary.uploader.upload(path, {
+//   folder: "power_pulse_project_avatars",
+//   public_id: _id,
+// });
+// console.log(result);
+// const user = await User.findOneAndUpdate(
+//   { email },
+//   { avatarURL: result.url },
+//   { new: true }
+// );
+// await fs.unlink(path);
+// res.status(200).json({
+//   user: {
+//     name: user.name,
+//     avatar: user.avatarURL,
+//   },
+// });
+//   if (!req.file) {
+//     throw HttpError(400, "Avatar must be provided");
+//   }
+//   const { _id } = req.user;
+//   const { path: tempUpload, originalname } = req.file;
+//   await Jimp.read(tempUpload)
+//     .then((avatar) => {
+//       return avatar.resize(250, 250).quality(60).write(tempUpload);
+//     })
+//     .catch((err) => {
+//       throw err;
+//     });
+//   const fileName = `${_id}_${originalname}`;
+//   const resultUpload = path.join(avatarDir, fileName);
+//   await fs.rename(tempUpload, resultUpload);
+//   const avatarURL = path.join("avatars", fileName);
+//   await User.findByIdAndUpdate(_id, { avatarURL });
+//   res.json({
+//     avatarURL,
+//   });
 
 module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
