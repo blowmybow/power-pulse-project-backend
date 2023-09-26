@@ -5,7 +5,7 @@
 const { User } = require("../models/user");
 const { ctrlWrapper, dailyCaloriesCalc } = require("../helpers");
 // const avatarDir = path.resolve("public", "avatars");
-// const { cloudinary } = require("../helpers");
+const { cloudinary } = require("../helpers");
 
 const updateParams = async (req, res) => {
   const { email } = req.user;
@@ -96,13 +96,29 @@ const getCurrent = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-  const avatarURL = req.file.path;
-  console.log(avatarURL);
+  // const avatarURL = req.file.path;
+  // console.log(avatarURL);
 
+  // const { _id } = req.user;
+  // await User.findByIdAndUpdate(_id, { avatarURL });
+
+  // res.status(200).json({ avatarURL });
+
+  const result = await cloudinary.uploader.upload(req.file.path, {
+    folder: 'avatars',
+    allowed_formats: ['jpg', 'png'],
+    transformation: [
+      { width: 350, height: 350 },
+      { width: 700, height: 700 },
+    ],
+  });
+
+  // Оновити URL аватарки для поточного користувача в базі даних
   const { _id } = req.user;
-  await User.findByIdAndUpdate(_id, { avatarURL });
+  const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL: result.secure_url }, { new: true });
 
-  res.status(200).json({ avatarURL });
+  // Повернути новий URL аватарки
+  res.json({ avatarURL: updatedUser.avatarURL });
 };
 // const { email, _id } = req.user;
 // const { path } = req.file;
