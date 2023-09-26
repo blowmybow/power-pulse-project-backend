@@ -5,6 +5,9 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getDatedProducts = async (req, res) => {
   const { _id: owner } = req.user;
+  const {
+    userParams: { blood = 0 },
+  } = req.user;
   const { date } = req.params;
   const { page = 1, limit = 10 } = req.query;
   const skip = (page - 1) * limit;
@@ -16,12 +19,18 @@ const getDatedProducts = async (req, res) => {
       limit,
     }
   ).lean();
-
+  // console.log(blood);
   let allCaloriesDay = 0;
   for (const obj of result) {
     allCaloriesDay += obj.calories;
     const productId = obj.productId;
     const product = await getProductById(productId);
+
+    if (product.groupBloodNotAllowed[blood]) {
+      obj.recommended = true;
+    } else {
+      obj.recommended = false;
+    }
     obj.product = product;
   }
 
@@ -32,7 +41,7 @@ const getDatedProducts = async (req, res) => {
 };
 
 const getProductById = async (id) => {
-  const result = await Product.findById(id);
+  const result = await Product.findById(id).lean();
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -46,9 +55,7 @@ const addDateProduct = async (req, res) => {
 };
 
 const deleteDatedProducts = async (req, res) => {
-  // const { _id: owner } = req.user;
   const { productIdUser } = req.params;
-  // const { product } = req.params;
   const result = await ProductDiary.findOneAndDelete({
     _id: productIdUser,
   });
