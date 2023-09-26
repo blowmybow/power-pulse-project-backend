@@ -17,19 +17,6 @@ router.post(
   ctrl.addDateProduct
 );
 
-router.delete("/:product/:date", authenticate, ctrl.deleteDatedProducts);
+router.delete("/:productIdUser", authenticate, ctrl.deleteDatedProducts);
 
 module.exports = router;
-//1234Asd
-//{
-//   "email": "andrii2@gmail.com",
-//   "password": "1234Asd"
-// }
-
-// {
-//   "productId": "650431e442f30f1602062518",
-//   "date": "21/09/2023",
-//   "amount": 100,
-//   "calories": 2000,
-//   "owner": "650b2e786360fe740b811ccc"
-// }

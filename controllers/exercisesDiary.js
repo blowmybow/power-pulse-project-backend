@@ -16,12 +16,18 @@ const getDatedExercise = async (req, res) => {
       limit,
     }
   ).lean();
+  let allCaloriesDay = 0;
+
   for (const obj of result) {
+    allCaloriesDay += obj.calories;
     const exerciseId = obj.exerciseId;
     const exercise = await getExerciseById(exerciseId);
     obj.exercise = exercise;
   }
-  res.json(result);
+  if (!result) {
+    throw HttpError(404, "Not found");
+  }
+  res.json({ result, allCaloriesDay });
 };
 
 const getExerciseById = async (id) => {
@@ -39,13 +45,9 @@ const addDatedExercise = async (req, res) => {
 };
 
 const deleteDatedExercise = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { date } = req.params;
-  const { exercise } = req.params;
+  const { exerciseIdUser } = req.params;
   const result = await ExerciseDiary.findOneAndDelete({
-    date: date,
-    exerciseId: exercise,
-    owner: owner,
+    _id: exerciseIdUser,
   });
   if (!result) {
     throw HttpError(404, "Not found");
