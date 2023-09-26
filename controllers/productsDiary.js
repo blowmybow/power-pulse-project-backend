@@ -19,7 +19,6 @@ const getDatedProducts = async (req, res) => {
       limit,
     }
   ).lean();
-  // console.log(blood);
   let allCaloriesDay = 0;
   for (const obj of result) {
     allCaloriesDay += obj.calories;

@@ -8,7 +8,7 @@ const getProducts = async (req, res) => {
   const {
     userParams: { blood = 0 },
   } = req.user;
-  // console.log(req.user);
+
   const {
     page = 1,
     limit = 6,
@@ -34,7 +34,6 @@ const getProducts = async (req, res) => {
     }
   }
 
-  // console.log(filter);
   const result = await Product.find(filter, "", {
     skip,
     limit,
@@ -42,9 +41,9 @@ const getProducts = async (req, res) => {
   if (!result) {
     throw HttpError(404, "Not found");
   }
-  // console.log(result);
+
   const totalProducts = await Product.countDocuments(filter);
-  // console.log(totalProducts);
+
   res.json({ page, limit, blood, totalProducts, result });
 };
 
