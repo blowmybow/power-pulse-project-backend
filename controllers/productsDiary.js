@@ -6,8 +6,13 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 const getDatedProducts = async (req, res) => {
   const { _id: owner } = req.user;
   const {
-    userParams: { blood = 0 },
+    userParams: { blood },
   } = req.user;
+
+  if (!blood) {
+    throw HttpError(400, "Not user params");
+  }
+
   const { date } = req.params;
   const { page = 1, limit = 10 } = req.query;
   const skip = (page - 1) * limit;
@@ -33,7 +38,6 @@ const getDatedProducts = async (req, res) => {
     obj.product = product;
   }
 
-  // result.allCaloriesDay = allCaloriesDay;
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -55,11 +59,13 @@ const addDateProduct = async (req, res) => {
 };
 
 const deleteDatedProducts = async (req, res) => {
-  // const { _id: owner } = req.user;
+  const { _id: owner } = req.user;
   const { productIdUser } = req.params;
-  // const { product } = req.params;
+  const { date } = req.params;
   const result = await ProductDiary.findOneAndDelete({
     _id: productIdUser,
+    owner,
+    date,
   });
 
   if (!result) {
