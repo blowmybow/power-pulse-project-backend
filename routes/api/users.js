@@ -27,7 +27,7 @@ router.patch(
   ctrl.updateUsername
 );
 router.patch(
-  '/avatars',
+  '/:userId/avatars',
   authenticate,
   upload.single('avatar'),
   ctrl.updateAvatar
