@@ -3,34 +3,35 @@ const Joi = require("joi");
 
 const { handleMongooseError } = require("../helpers");
 
-const productDiarySchema = new Schema({
-  productId: {
-    type: Schema.Types.ObjectId,
-    ref: "product",
-    required: true,
+const productDiarySchema = new Schema(
+  {
+    productId: {
+      type: Schema.Types.ObjectId,
+      ref: "product",
+      required: true,
+    },
+    date: {
+      type: String,
+      format: "dd/mm/YYYY",
+      required: true,
+    },
+    amount: {
+      type: Number,
+      min: 1,
+      required: true,
+    },
+    calories: {
+      type: Number,
+      min: 1,
+      required: true,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
-  date: {
-    type: String,
-    format: "dd/mm/YYYY",
-    required: true,
-  },
-  amount: {
-    type: Number,
-    min: 1,
-    required: true,
-  },
-  calories: {
-    type: Number,
-    min: 1,
-    required: true,
-  },
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "user",
-    required: true,
-  },
-},
-{ versionKey: false, timestamps: true }
+  { versionKey: false, timestamps: true }
 );
 
 productDiarySchema.post("save", handleMongooseError);
@@ -42,12 +43,11 @@ const addProductDiarySchema = Joi.object({
   date: Joi.string().required(),
   amount: Joi.number().min(1).required(),
   calories: Joi.number().min(1).required(),
-  owner: Joi.string().required(),
 });
 
 const schemas = {
   addProductDiarySchema,
-}
+};
 
 module.exports = {
   ProductDiary,

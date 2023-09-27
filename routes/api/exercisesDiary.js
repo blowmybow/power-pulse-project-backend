@@ -17,6 +17,6 @@ router.post(
   ctrl.addDatedExercise
 );
 
-router.delete("/:exerciseIdUser", authenticate, ctrl.deleteDatedExercise);
+router.delete("/:exerciseIdUser/:date", authenticate, ctrl.deleteDatedExercise);
 
 module.exports = router;

@@ -17,6 +17,6 @@ router.post(
   ctrl.addDateProduct
 );
 
-router.delete("/:productIdUser", authenticate, ctrl.deleteDatedProducts);
+router.delete("/:productIdUser/:date", authenticate, ctrl.deleteDatedProducts);
 
 module.exports = router;

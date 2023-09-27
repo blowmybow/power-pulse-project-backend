@@ -1,13 +1,15 @@
-const { Exercise } = require("../models/exercise");
+const Exercise = require("../models/exercise");
 const { User } = require("../models/user");
-const Statistics = require("../models/statistics");
+const { ExerciseDiary } = require("../models/exerciseDiary");
 
 const ctrlWrapper = require("../helpers/ctrlWrapper");
 
 const statistics = async (req, res) => {
   const usersData = await User.find();
   const exercisesData = await Exercise.find();
-  const statisticsData = await Statistics.find().select("calories time").lean();
+  const statisticsData = await ExerciseDiary.find()
+    .select("calories time")
+    .lean();
 
   let allCalories = 0;
   let allTimeMin = 0;

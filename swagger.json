@@ -446,12 +446,21 @@
         }
       }
     },
-    "/exercises_diary": {
+    "/exercise_diary/{date}": {
       "get": {
         "summary": "Get dated exercises",
         "tags": ["Diary"],
         "description": "Get a list of dated exercises with filtering and pagination options",
         "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
           {
             "name": "page",
             "in": "query",
@@ -487,7 +496,9 @@
             "description": "Unauthorized request"
           }
         }
-      },
+      }
+    },
+    "/exercise_diary": {
       "post": {
         "summary": "Add a dated exercise",
         "tags": ["Diary"],
@@ -513,12 +524,20 @@
         }
       }
     },
-    "/exercises_diary/{date}/{exercise}": {
+    "/exercises_diary/{idExerciseUser}/{date}": {
       "delete": {
         "summary": "Delete a dated exercise",
         "tags": ["Diary"],
         "description": "Delete a dated exercise from the diary by date and exercise ID",
         "parameters": [
+          {
+            "name": "idExerciseUser",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "date",
             "in": "path",
@@ -526,14 +545,6 @@
             "schema": {
               "type": "string",
               "format": "date"
-            }
-          },
-          {
-            "name": "exercise",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
             }
           }
         ],
@@ -631,6 +642,9 @@
           },
           "401": {
             "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Product not found"
           }
         }
       }
@@ -691,16 +705,28 @@
           },
           "401": {
             "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Categories products not found"
           }
         }
       }
     },
-    "/products_diary": {
+    "/products_diary/{date}": {
       "get": {
         "summary": "Get dated products",
         "tags": ["Diary"],
         "description": "Get a list of dated products with filtering and pagination options",
         "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          },
           {
             "name": "page",
             "in": "query",
@@ -736,7 +762,9 @@
             "description": "Unauthorized request"
           }
         }
-      },
+      }
+    },
+    "/products_diary": {
       "post": {
         "summary": "Add a dated product",
         "tags": ["Diary"],
@@ -758,16 +786,27 @@
           },
           "401": {
             "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Product not found"
           }
         }
       }
     },
-    "/products_diary/{date}/{product}": {
+    "/products_diary/{idProductUser}/{date}": {
       "delete": {
         "summary": "Delete a dated product",
         "tags": ["Diary"],
         "description": "Delete a dated product from the diary by date and product ID",
         "parameters": [
+          {
+            "name": "idProductUser",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "date",
             "in": "path",
@@ -775,14 +814,6 @@
             "schema": {
               "type": "string",
               "format": "date"
-            }
-          },
-          {
-            "name": "product",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
             }
           }
         ],
@@ -817,6 +848,9 @@
           },
           "401": {
             "description": "Unauthorized request"
+          },
+          "404": {
+            "description": "Statistics not found"
           }
         }
       }
@@ -830,38 +864,44 @@
         "properties": {
           "name": {
             "type": "string",
-            "example":"Bob Tirel",
+            "example": "Bob Tirel",
             "description": "User's name"
-            
           },
           "email": {
             "type": "string",
             "format": "email",
-            "example":"bobtirel@gmail.com",
+            "example": "bobtirel@gmail.com",
             "description": "User's email"
           },
           "password": {
             "type": "string",
-            "example":"123456",
+            "example": "123456",
             "description": "User's password"
           }
         }
       },
       "RegistrationResponse": {
         "type": "object",
-          "properties": {
-            "token": { "type": "string", "example":"your authentication token" },
-            "user": {
-              "type": "object",
-                "properties": {
-                  "name": { "type": "string", "example":"Bob Tirel" },
-                  "email": { "type": "string", "format": "email", "example":"bobtirel@gmail.com" },
-                  "avatarURL": { "type": "string", "example":"avatar" },
-                  "userParams": { "type": "object", "example":{} },
-                  "createdAt": { "type": "date",  "example": "2023-09-19T19:55:19.539+00:00" }
-                }
+        "properties": {
+          "token": { "type": "string", "example": "your authentication token" },
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string", "example": "Bob Tirel" },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "example": "bobtirel@gmail.com"
+              },
+              "avatarURL": { "type": "string", "example": "avatar" },
+              "userParams": { "type": "object", "example": {} },
+              "createdAt": {
+                "type": "date",
+                "example": "2023-09-19T19:55:19.539+00:00"
               }
+            }
           }
+        }
       },
       "LoginUser": {
         "type": "object",
