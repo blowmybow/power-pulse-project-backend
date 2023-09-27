@@ -4,6 +4,8 @@
     "title": "power-pulse-project-backend",
     "version": "2.0.1"
   },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
   "servers": [
     { "url": "https://power-pulse-project-backend.onrender.com" },
     { "url": "http://localhost:3000" }
@@ -40,22 +42,31 @@
         "summary": "Register a new user",
         "tags": ["Auth"],
         "description": "Register a new user in the system",
+        "security": [{ "Bearer": [] }],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegisterUser"
+                "$ref": "#/components/schemas/RegistrationRequest"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "User successfully registered"
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Bad request"
+            "description": "Bad request (invalid request body)",
+            "content": {}
           }
         }
       }
@@ -813,6 +824,59 @@
   },
   "components": {
     "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "example":"Bob Tirel",
+            "description": "User's name"
+            
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example":"bobtirel@gmail.com",
+            "description": "User's email"
+          },
+          "password": {
+            "type": "string",
+            "example":"123456",
+            "description": "User's password"
+          }
+        }
+      },
+      "RegistrationResponse": {
+        "type": "object",
+          "properties": {
+            "token": { "type": "string", "example":"your authentication token" },
+            "user": {
+              "type": "object",
+                "properties": {
+                  "name": { "type": "string", "example":"Bob Tirel" },
+                  "email": { "type": "string", "format": "email", "example":"bobtirel@gmail.com" },
+                  "avatarURL": { "type": "string", "example":"avatar" },
+                  "userParams": { "type": "object", "example":{} },
+                  "createdAt": { "type": "date",  "example": "2023-09-19T19:55:19.539+00:00" }
+                }
+              }
+          }
+      },
+      "LoginUser": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password"
+          }
+        }
+      },
       "Exercise": {
         "type": "object",
         "properties": {
@@ -1017,38 +1081,6 @@
           },
           "levelActivity": {
             "type": "number"
-          }
-        }
-      },
-      "RegisterUser": {
-        "type": "object",
-        "required": ["name", "email", "password"],
-        "properties": {
-          "name": {
-            "type": "string",
-            "description": "User's name"
-          },
-          "email": {
-            "type": "string",
-            "description": "User's email"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password"
-          }
-        }
-      },
-      "LoginUser": {
-        "type": "object",
-        "required": ["email", "password"],
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "User's email"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password"
           }
         }
       },
