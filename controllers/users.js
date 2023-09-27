@@ -112,12 +112,10 @@ const updateAvatar = async (req, res) => {
       { width: 700, height: 700 },
     ],
   });
-
-  // Оновити URL аватарки для поточного користувача в базі даних
+  
   const { _id } = req.user;
   const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL: result.secure_url }, { new: true });
-
-  // Повернути новий URL аватарки
+  
   res.json({ avatarURL: updatedUser.avatarURL });
 };
 // const { email, _id } = req.user;
