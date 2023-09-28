@@ -101,24 +101,19 @@ const updateAvatar = async (req, res) => {
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
-
-  // Завантаження аватарки в папку tmp
+  
   await fs.rename(tempUpload, resultUpload);
 
-  // Обробка аватарки за допомогою бібліотеки jimp
   const avatar = await jimp.read(resultUpload);
   await avatar.resize(250, 250);
   await avatar.writeAsync(resultUpload);
-
-  // Генерація унікального імені файлу
+  
   const uniqueFileName = `${_id}_${Date.now()}.${originalname.split('.').pop()}`;
   const avatarURL = path.join('avatars', uniqueFileName);
-
-  // Переміщення обробленої аватарки в папку public/avatars
+  
   const newAvatarPath = path.join(avatarsDir, uniqueFileName);
   await fs.rename(resultUpload, newAvatarPath);
-
-  // Оновлення URL аватарки в базі даних
+  
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.json({

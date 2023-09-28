@@ -6,11 +6,3 @@ const handleMongooseError = (error, data, next) => {
 };
 
 module.exports = handleMongooseError;
-
-// const handleMongooseError = (error, data, next) => {
-//   error.status = 400;
-//   next();
-// };
-
-// module.exports = handleMongooseError;
-
