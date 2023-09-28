@@ -105,17 +105,21 @@ const updateAvatar = async (req, res) => {
   // res.status(200).json({ avatarURL });
 
   const result = await cloudinary.uploader.upload(req.file.path, {
-    folder: 'avatars',
-    allowed_formats: ['jpg', 'png'],
+    folder: "avatars",
+    allowed_formats: ["jpg", "png"],
     transformation: [
       { width: 350, height: 350 },
       { width: 700, height: 700 },
     ],
   });
-  
+
   const { _id } = req.user;
-  const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL: result.secure_url }, { new: true });
-  
+  const updatedUser = await User.findByIdAndUpdate(
+    _id,
+    { avatarURL: result.secure_url },
+    { new: true }
+  );
+
   res.json({ avatarURL: updatedUser.avatarURL });
 };
 // const { email, _id } = req.user;
