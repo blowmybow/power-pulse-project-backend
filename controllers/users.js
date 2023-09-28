@@ -1,11 +1,12 @@
-// const path = require("path");
-// const fs = require("fs/promises");
-// const Jimp = require("jimp");
+const path = require("path");
+const fs = require("fs/promises");
+const jimp = require('jimp');
 
 const { User } = require("../models/user");
 const { ctrlWrapper, dailyCaloriesCalc } = require("../helpers");
+const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 // const avatarDir = path.resolve("public", "avatars");
-const { cloudinary } = require("../helpers");
+// const { cloudinary } = require("../helpers");
 
 const updateParams = async (req, res) => {
   const { email } = req.user;
@@ -96,28 +97,47 @@ const getCurrent = async (req, res) => {
 };
 
 const updateAvatar = async (req, res) => {
-  // const avatarURL = req.file.path;
-  // console.log(avatarURL);
-
-  // const { _id } = req.user;
-  // await User.findByIdAndUpdate(_id, { avatarURL });
-
-  // res.status(200).json({ avatarURL });
-
-  const result = await cloudinary.uploader.upload(req.file.path, {
-    folder: 'avatars',
-    allowed_formats: ['jpg', 'png'],
-    transformation: [
-      { width: 350, height: 350 },
-      { width: 700, height: 700 },
-    ],
-  });
-  
   const { _id } = req.user;
-  const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL: result.secure_url }, { new: true });
-  
-  res.json({ avatarURL: updatedUser.avatarURL });
-};
+  const { path: tempUpload, originalname } = req.file;
+  const filename = `${_id}_${originalname}`;
+  const resultUpload = path.join(avatarsDir, filename);
+
+  // Завантаження аватарки в папку tmp
+  await fs.rename(tempUpload, resultUpload);
+
+  // Обробка аватарки за допомогою бібліотеки jimp
+  const avatar = await jimp.read(resultUpload);
+  await avatar.resize(250, 250);
+  await avatar.writeAsync(resultUpload);
+
+  // Генерація унікального імені файлу
+  const uniqueFileName = `${_id}_${Date.now()}.${originalname.split('.').pop()}`;
+  const avatarURL = path.join('avatars', uniqueFileName);
+
+  // Переміщення обробленої аватарки в папку public/avatars
+  const newAvatarPath = path.join(avatarsDir, uniqueFileName);
+  await fs.rename(resultUpload, newAvatarPath);
+
+  // Оновлення URL аватарки в базі даних
+  await User.findByIdAndUpdate(_id, { avatarURL });
+
+  res.json({
+      avatarURL,
+  });
+
+}
+
+// const updateAvatar = async (req, res) => {
+//   const avatarURL = req.file.path;
+//   console.log(avatarURL);
+
+//   const { _id } = req.user;
+//   await User.findByIdAndUpdate(_id, { avatarURL });
+
+//   res.status(200).json({ avatarURL });
+
+// };
+
 // const { email, _id } = req.user;
 // const { path } = req.file;
 // const result = await cloudinary.uploader.upload(path, {
