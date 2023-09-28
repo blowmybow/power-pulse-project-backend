@@ -82,14 +82,21 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginUser"
+                "$ref": "#/components/schemas/LoginRequest"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Successful login"
+            "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized request"
@@ -875,47 +882,65 @@
           },
           "password": {
             "type": "string",
-            "example": "123456",
+            "example":"btirel1",
             "description": "User's password"
           }
         }
       },
       "RegistrationResponse": {
         "type": "object",
-        "properties": {
-          "token": { "type": "string", "example": "your authentication token" },
-          "user": {
-            "type": "object",
-            "properties": {
-              "name": { "type": "string", "example": "Bob Tirel" },
-              "email": {
-                "type": "string",
-                "format": "email",
-                "example": "bobtirel@gmail.com"
-              },
-              "avatarURL": { "type": "string", "example": "avatar" },
-              "userParams": { "type": "object", "example": {} },
-              "createdAt": {
-                "type": "date",
-                "example": "2023-09-19T19:55:19.539+00:00"
+          "properties": {
+            "token": { "type": "string", "example":"your authentication token" },
+            "user": {
+              "type": "object",
+                "properties": {
+                  "name": { "type": "string", "example":"Bob Tirel" },
+                  "email": { "type": "string", "format": "email", "example":"bobtirel@gmail.com" },
+                  "avatarURL": { "type": "string", "example":"//www.gravatar.com/avatar/681cc53f6ba12f990cc1ae04f63ee53c" },
+                  "userParams": { "type": "object", "example":{} },
+                  "createdAt": { "type": "date",  "example": "2023-09-19T19:55:19.539+00:00" }
+                }
               }
-            }
           }
-        }
       },
-      "LoginUser": {
+      "LoginRequest": {
         "type": "object",
         "required": ["email", "password"],
         "properties": {
           "email": {
             "type": "string",
+            "example":"bobtirel@gmail.com",
             "description": "User's email"
           },
           "password": {
             "type": "string",
+            "example":"btirel1",
             "description": "User's password"
           }
         }
+      },
+      "LoginResponse": {
+        "type": "object",
+          "properties": {
+            "token": { "type": "string", "example":"your authentication token" },
+            "user": {
+              "type": "object",
+                "properties": {
+                  "name": { "type": "string", "example":"Bob Tirel" },
+                  "email": { "type": "string", "format": "email", "example":"bobtirel@gmail.com" },
+                  "avatarURL": { "type": "string", "example":"//www.gravatar.com/avatar/681cc53f6ba12f990cc1ae04f63ee53c" },
+                  "userParams": { "type": "object", "example":{
+                    "height": 190,
+                    "currentWeight": 82,
+                    "desiredWeight": 74,
+                    "birthday": "1988-05-07T00:00:00.000+00:00",
+                    "blood": 2,
+                    "sex": "male",
+                    "levelActivity": 5} },
+                  "createdAt": { "type": "date",  "example": "2023-09-19T19:55:19.539+00:00" }
+                }
+              }
+          }
       },
       "Exercise": {
         "type": "object",
