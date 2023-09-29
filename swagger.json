@@ -280,6 +280,7 @@
     "/exercises": {
       "get": {
         "summary": "Get all exercises",
+        "security": [{ "Bearer": [] }],
         "tags": ["Exercises"],
         "description": "Get a list of all exercises",
         "parameters": [
@@ -352,6 +353,7 @@
     "/exercises/bodyparts": {
       "get": {
         "summary": "Get all muscle groups (body parts)",
+        "security": [{ "Bearer": [] }],
         "tags": ["Exercises"],
         "description": "Get a list of all muscle groups (body parts)",
         "responses": {
@@ -377,6 +379,7 @@
     "/exercises/muscles": {
       "get": {
         "summary": "Get all muscles",
+        "security": [{ "Bearer": [] }],
         "tags": ["Exercises"],
         "description": "Get a list of all muscles",
         "responses": {
@@ -402,6 +405,7 @@
     "/exercises/equipments": {
       "get": {
         "summary": "Get all types of equipment",
+        "security": [{ "Bearer": [] }],
         "tags": ["Exercises"],
         "description": "Get a list of all types of equipment",
         "responses": {
@@ -427,6 +431,7 @@
     "/exercises/{id}": {
       "get": {
         "summary": "Get an exercise by ID",
+        "security": [{ "Bearer": [] }],
         "tags": ["Exercises"],
         "description": "Get an exercise from the database by ID",
         "parameters": [
@@ -462,6 +467,7 @@
     "/exercise_diary/{date}": {
       "get": {
         "summary": "Get dated exercises",
+        "security": [{ "Bearer": [] }],
         "tags": ["Diary"],
         "description": "Get a list of dated exercises with filtering and pagination options",
         "parameters": [
@@ -514,6 +520,7 @@
     "/exercise_diary": {
       "post": {
         "summary": "Add a dated exercise",
+        "security": [{ "Bearer": [] }],
         "tags": ["Diary"],
         "description": "Add a dated exercise to the diary",
         "requestBody": {
@@ -540,6 +547,7 @@
     "/exercises_diary/{idExerciseUser}/{date}": {
       "delete": {
         "summary": "Delete a dated exercise",
+        "security": [{ "Bearer": [] }],
         "tags": ["Diary"],
         "description": "Delete a dated exercise from the diary by date and exercise ID",
         "parameters": [
@@ -577,6 +585,7 @@
     "/products": {
       "get": {
         "summary": "Get a list of products",
+        "security": [{ "Bearer": [] }],
         "tags": ["Products"],
         "description": "Get a list of products with filtering and pagination options",
         "parameters": [
@@ -665,6 +674,7 @@
     "/products/{id}": {
       "get": {
         "summary": "Get a product by ID",
+        "security": [{ "Bearer": [] }],
         "tags": ["Products"],
         "description": "Get a product by its unique ID",
         "parameters": [
@@ -700,6 +710,7 @@
     "/products/categories": {
       "get": {
         "summary": "Get product categories",
+        "security": [{ "Bearer": [] }],
         "tags": ["Products"],
         "description": "Get a list of product categories",
         "responses": {
@@ -728,6 +739,7 @@
     "/products_diary/{date}": {
       "get": {
         "summary": "Get dated products",
+        "security": [{ "Bearer": [] }],
         "tags": ["Diary"],
         "description": "Get a list of dated products with filtering and pagination options",
         "parameters": [
@@ -780,6 +792,7 @@
     "/products_diary": {
       "post": {
         "summary": "Add a dated product",
+        "security": [{ "Bearer": [] }],
         "tags": ["Diary"],
         "description": "Add a dated product to the diary",
         "requestBody": {
@@ -809,6 +822,7 @@
     "/products_diary/{idProductUser}/{date}": {
       "delete": {
         "summary": "Delete a dated product",
+        "security": [{ "Bearer": [] }],
         "tags": ["Diary"],
         "description": "Delete a dated product from the diary by date and product ID",
         "parameters": [

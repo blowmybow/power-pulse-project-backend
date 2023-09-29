@@ -1,12 +1,10 @@
 const path = require("path");
 const fs = require("fs/promises");
-const jimp = require('jimp');
+const jimp = require("jimp");
 
 const { User } = require("../models/user");
 const { ctrlWrapper, dailyCaloriesCalc } = require("../helpers");
-const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
-// const avatarDir = path.resolve("public", "avatars");
-// const { cloudinary } = require("../helpers");
+const avatarsDir = path.join(__dirname, "../", "public", "avatars");
 
 const updateParams = async (req, res) => {
   const { email } = req.user;
@@ -101,77 +99,27 @@ const updateAvatar = async (req, res) => {
   const { path: tempUpload, originalname } = req.file;
   const filename = `${_id}_${originalname}`;
   const resultUpload = path.join(avatarsDir, filename);
-  
+
   await fs.rename(tempUpload, resultUpload);
 
   const avatar = await jimp.read(resultUpload);
   await avatar.resize(250, 250);
   await avatar.writeAsync(resultUpload);
-  
-  const uniqueFileName = `${_id}_${Date.now()}.${originalname.split('.').pop()}`;
-  const avatarURL = path.join('avatars', uniqueFileName);
-  
+
+  const uniqueFileName = `${_id}_${Date.now()}.${originalname
+    .split(".")
+    .pop()}`;
+  const avatarURL = path.join("avatars", uniqueFileName);
+
   const newAvatarPath = path.join(avatarsDir, uniqueFileName);
   await fs.rename(resultUpload, newAvatarPath);
-  
+
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.json({
-      avatarURL,
+    avatarURL,
   });
-
-}
-
-// const updateAvatar = async (req, res) => {
-//   const avatarURL = req.file.path;
-//   console.log(avatarURL);
-
-//   const { _id } = req.user;
-//   await User.findByIdAndUpdate(_id, { avatarURL });
-
-//   res.status(200).json({ avatarURL });
-
-// };
-
-// const { email, _id } = req.user;
-// const { path } = req.file;
-// const result = await cloudinary.uploader.upload(path, {
-//   folder: "power_pulse_project_avatars",
-//   public_id: _id,
-// });
-// console.log(result);
-// const user = await User.findOneAndUpdate(
-//   { email },
-//   { avatarURL: result.url },
-//   { new: true }
-// );
-// await fs.unlink(path);
-// res.status(200).json({
-//   user: {
-//     name: user.name,
-//     avatar: user.avatarURL,
-//   },
-// });
-//   if (!req.file) {
-//     throw HttpError(400, "Avatar must be provided");
-//   }
-//   const { _id } = req.user;
-//   const { path: tempUpload, originalname } = req.file;
-//   await Jimp.read(tempUpload)
-//     .then((avatar) => {
-//       return avatar.resize(250, 250).quality(60).write(tempUpload);
-//     })
-//     .catch((err) => {
-//       throw err;
-//     });
-//   const fileName = `${_id}_${originalname}`;
-//   const resultUpload = path.join(avatarDir, fileName);
-//   await fs.rename(tempUpload, resultUpload);
-//   const avatarURL = path.join("avatars", fileName);
-//   await User.findByIdAndUpdate(_id, { avatarURL });
-//   res.json({
-//     avatarURL,
-//   });
+};
 
 module.exports = {
   getCurrent: ctrlWrapper(getCurrent),
